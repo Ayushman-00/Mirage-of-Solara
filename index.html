@@ -1,0 +1,718 @@
+<!doctype html>
+<html lang=en>
+
+<head>
+  <meta charset=utf-8>
+  <title>Mirage of Solara</title>
+  <meta name=viewport content="width=device-width,initial-scale=1">
+  <meta name=theme-color content=#070d1a>
+  <style>
+    html {
+      background: #070d1a
+    }
+
+    body {
+      position: fixed;
+      inset: 0;
+      margin: 0;
+      overflow: hidden;
+      background: radial-gradient(ellipse at 62% 70%, #1b3054, #091224 62%, #050912);
+      font: 500 clamp(12px, .6vw + .7vh, 23px)/1.4 system-ui, sans-serif;
+      color: #f5ede0;
+      user-select: none
+    }
+
+    @media(orientation:portrait)and (pointer:coarse) {
+      body {
+        width: 100dvh;
+        height: 100dvw;
+        transform-origin: 0 0;
+        transform: rotate(90deg) translateY(-100%)
+      }
+    }
+
+    canvas {
+      position: absolute;
+      inset: 0;
+      width: 100%;
+      height: 100%;
+      touch-action: none;
+      cursor: crosshair;
+      transition: filter 1s, transform 1s, opacity 1.5s
+    }
+
+    body:not(.g) canvas {
+      filter: blur(7px) brightness(.72);
+      transform: scale(1.03)
+    }
+
+    .l canvas {
+      opacity: 0
+    }
+
+    #m {
+      position: absolute;
+      inset: 0;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      align-items: center;
+      padding: clamp(2em, 6vh, 4.2em) 1.4em clamp(1.1em, 3vh, 2.2em);
+      text-align: center;
+      background: linear-gradient(#060b16b0, #0000 35%, #0000 62%, #060b16d8);
+      transition: opacity .5s, visibility .5s;
+      z-index: 20;
+      pointer-events: none
+    }
+
+    .g #m {
+      opacity: 0;
+      visibility: hidden
+    }
+
+    #br {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .5em
+    }
+
+    #cr {
+      width: 2.9em;
+      height: 2.9em;
+      stroke: #f4c57a;
+      fill: none;
+      filter: drop-shadow(0 0 .6em #9cc2ff66)
+    }
+
+    h1 {
+      margin: 0;
+      font: 300 clamp(2em, 4.4vw, 4em)/1.05 Georgia, serif;
+      letter-spacing: .26em;
+      text-indent: .26em;
+      text-transform: uppercase;
+      color: #0000;
+      background: linear-gradient(#fff8ec 14%, #f5d093 60%, #c97834);
+      -webkit-background-clip: text;
+      background-clip: text;
+      filter: drop-shadow(0 .08em .28em #000c)
+    }
+
+    #sub {
+      font-size: .63em;
+      letter-spacing: .38em;
+      text-indent: .38em;
+      text-transform: uppercase;
+      color: #d6e3f8b8
+    }
+
+    .rl {
+      width: min(17em, 55vw);
+      height: 1px;
+      background: linear-gradient(90deg, #0000, #f4c57a88, #0000)
+    }
+
+    #dk {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: .75em;
+      width: min(31em, 90vw);
+      pointer-events: auto
+    }
+
+    #sw {
+      display: grid;
+      width: 100%;
+      place-items: center
+    }
+
+    #sw>* {
+      grid-area: 1/1;
+      transition: opacity .5s, visibility .5s, transform .5s
+    }
+
+    .m #l,
+    .l #d {
+      opacity: 0;
+      visibility: hidden;
+      transform: translateY(.5em)
+    }
+
+    #l {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: .4em
+    }
+
+    #lt {
+      display: flex;
+      justify-content: space-between;
+      font-size: .63em;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #dce6f8d4
+    }
+
+    #pc {
+      font-family: ui-monospace, monospace;
+      color: #f7c87d
+    }
+
+    #p {
+      height: 3px;
+      overflow: hidden;
+      border-radius: 9px;
+      background: #dce6f824
+    }
+
+    #b {
+      display: block;
+      height: 100%;
+      background: linear-gradient(90deg, #8bb4f8, #ffe3a8);
+      transform: scaleX(0);
+      transform-origin: 0
+    }
+
+    .e #p {
+      visibility: hidden
+    }
+
+    .e #s {
+      letter-spacing: 0;
+      text-transform: none;
+      color: #ffb090
+    }
+
+    #w {
+      font-size: .58em;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      color: #f7c87daa
+    }
+
+    #d {
+      display: inline-flex;
+      align-items: center;
+      gap: .7em;
+      padding: .74em 2.1em;
+      border: 1px solid #f6ca8288;
+      border-radius: 99em;
+      background: linear-gradient(#f5c97e29, #c96b2745);
+      backdrop-filter: blur(10px);
+      color: #fff6e6;
+      font: 600 .8em/1 system-ui, sans-serif;
+      letter-spacing: .25em;
+      text-transform: uppercase;
+      cursor: pointer;
+      box-shadow: 0 0 2em #d9762638;
+      transition: transform .18s
+    }
+
+    #d:hover {
+      transform: translateY(-2px)
+    }
+
+    #gh {
+      display: inline-flex;
+      align-items: center;
+      gap: .45em;
+      padding: .32em .8em;
+      border-radius: 99em;
+      text-decoration: none;
+      font-size: .61em;
+      letter-spacing: .14em;
+      color: #dce6f8aa;
+      border: 1px solid #f4c57a28;
+      background: #0a102066
+    }
+
+    #gh:hover {
+      color: #fff5e0;
+      border-color: #f4c57a70
+    }
+
+    #gh svg,
+    #sb svg {
+      width: 1.2em;
+      height: 1.2em;
+      fill: currentColor
+    }
+
+    #sb {
+      position: fixed;
+      top: 1em;
+      right: 1em;
+      width: 2.5em;
+      height: 2.5em;
+      border-radius: 50%;
+      border: 1px solid #f4c57a55;
+      background: #0c111eb0;
+      backdrop-filter: blur(10px);
+      color: #f9d9a4;
+      display: grid;
+      place-items: center;
+      cursor: pointer;
+      z-index: 30;
+      transition: transform .25s, opacity .25s
+    }
+
+    #sb:hover {
+      transform: rotate(32deg)
+    }
+
+    .p #sb {
+      opacity: .42
+    }
+
+    #sb.on {
+      border-color: #f8d28e;
+      background: #261a12e0;
+      transform: rotate(60deg)
+    }
+
+    #sp {
+      position: fixed;
+      top: 4em;
+      right: 1em;
+      width: min(19.5em, calc(100vw - 2em));
+      max-height: calc(100dvh - 5em);
+      overflow-y: auto;
+      padding: .95em 1.05em;
+      border-radius: 1em;
+      border: 1px solid #f4c57a3a;
+      background: #0c101adc;
+      backdrop-filter: blur(16px);
+      z-index: 29;
+      display: flex;
+      flex-direction: column;
+      gap: .8em;
+      opacity: 0;
+      visibility: hidden;
+      transform: translateX(1em);
+      transition: opacity .25s, visibility .25s, transform .25s
+    }
+
+    #sp.on {
+      opacity: 1;
+      visibility: visible;
+      transform: none
+    }
+
+    .sh {
+      display: flex;
+      justify-content: space-between;
+      font-size: .62em;
+      letter-spacing: .18em;
+      text-transform: uppercase;
+      color: #f5c77e;
+      padding-bottom: .38em;
+      border-bottom: 1px solid #f4c57a24
+    }
+
+    .sh span:last-child {
+      font-family: ui-monospace, monospace;
+      color: #dce6f888
+    }
+
+    #q {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: .3em
+    }
+
+    #q button,
+    .tg {
+      padding: .48em .38em;
+      border-radius: .45em;
+      border: 1px solid #f4c57a2e;
+      background: #f4c57a0d;
+      color: #f4e3c8;
+      font: 700 .61em/1.1 system-ui, sans-serif;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      cursor: pointer
+    }
+
+    #q .on,
+    .tg.on {
+      background: linear-gradient(#f6cd84, #d67625);
+      border-color: #ffe0a3;
+      color: #221005
+    }
+
+    .rw {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: .38em
+    }
+
+    .kl {
+      display: grid;
+      grid-template-columns: auto 1fr;
+      align-items: center;
+      gap: .35em .65em;
+      font-size: .62em;
+      color: #e8d3b3
+    }
+
+    .kl i {
+      display: flex;
+      gap: .2em;
+      font-style: normal
+    }
+
+    .kl b {
+      min-width: 1.4em;
+      padding: .15em .38em;
+      border-radius: .26em;
+      background: #f7e4c51c;
+      border: 1px solid #f4c57a44;
+      color: #ffe4b5;
+      text-align: center;
+      font: 700 .92em/1.1 ui-monospace, monospace
+    }
+
+    .kl span {
+      text-align: right;
+      color: #dce6f8bb;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      font-size: .9em
+    }
+
+    #hm {
+      display: none;
+      font-size: .62em;
+      color: #dce6f8bb
+    }
+
+    @media(pointer:coarse) {
+      .kl {
+        display: none
+      }
+
+      #hm {
+        display: block
+      }
+    }
+
+    #sp .gl {
+      text-align: center;
+      font-size: .58em;
+      letter-spacing: .12em;
+      color: #f4c57a99;
+      text-decoration: none;
+      padding-top: .38em;
+      border-top: 1px solid #f4c57a20
+    }
+
+    #i {
+      position: absolute;
+      top: 1em;
+      left: 1.2em;
+      margin: 0;
+      font: .7em/1.5 ui-monospace, monospace;
+      white-space: pre-wrap;
+      text-shadow: 0 1px 4px #000;
+      pointer-events: none;
+      z-index: 12
+    }
+
+    #hud {
+      position: absolute;
+      left: 50%;
+      bottom: .95em;
+      transform: translateX(-50%);
+      display: none;
+      flex-direction: column;
+      align-items: center;
+      gap: .34em;
+      max-width: 98vw;
+      z-index: 15;
+      pointer-events: none
+    }
+
+    .g #hud {
+      display: flex
+    }
+
+    #cap {
+      padding: .24em .88em;
+      border-radius: 99em;
+      background: #0c101ab8;
+      border: 1px solid #f4c57a3c;
+      font-size: .61em;
+      color: #fce6c2;
+      backdrop-filter: blur(8px);
+      transition: opacity .5s
+    }
+
+    #cap.f {
+      opacity: 0
+    }
+
+    #bar {
+      display: flex;
+      justify-content: center;
+      gap: .2em;
+      padding: .22em;
+      border-radius: 99em;
+      background: #0c101ac4;
+      border: 1px solid #f4c57a40;
+      backdrop-filter: blur(10px);
+      pointer-events: auto;
+      transition: opacity .3s;
+      max-width: 96vw;
+      overflow-x: auto
+    }
+
+    .p #bar {
+      opacity: .52
+    }
+
+    #bar:hover {
+      opacity: 1
+    }
+
+    #bar button {
+      display: flex;
+      align-items: center;
+      gap: .38em;
+      padding: .38em .72em;
+      border: 0;
+      border-radius: 99em;
+      background: none;
+      font: 700 .57em/1.1 system-ui, sans-serif;
+      letter-spacing: .06em;
+      text-transform: uppercase;
+      color: #f4dec0;
+      white-space: nowrap;
+      cursor: pointer
+    }
+
+    #bar button:hover {
+      background: #f4c57a2b
+    }
+
+    #bar button b {
+      display: inline-grid;
+      place-items: center;
+      width: 1.38em;
+      height: 1.38em;
+      border-radius: 50%;
+      background: #f4c57a26;
+      font-size: .88em;
+      color: #f7c97e
+    }
+
+    #bar button.on {
+      background: linear-gradient(#f8d38c, #da7624);
+      color: #221005
+    }
+
+    #bar button.on b {
+      background: #22100524;
+      color: #221005
+    }
+
+    @media(max-width:780px) {
+      #bar {
+        flex-wrap: wrap;
+        border-radius: 1em
+      }
+
+      #bar button {
+        font-size: .53em;
+        padding: .34em .54em
+      }
+    }
+  </style>
+</head>
+
+<body class=l><canvas id=c></canvas>
+  <div id=m>
+    <div id=br><svg id=cr viewBox="0 0 64 64">
+        <circle cx=32 cy=32 r=10 stroke-width=1.6 />
+        <circle cx=32 cy=32 r=22 stroke-width=.8 stroke-dasharray="2 4" />
+        <path stroke-width=1.3
+          d="M32 3v11M32 50v11M3 32h11M50 32h11M11.5 11.5l7.5 7.5M45 45l7.5 7.5M52.5 11.5L45 19M19 45l-7.5 7.5" />
+        <polygon points="32,26 36,32 32,38 28,32" fill="#f4c57a" />
+      </svg>
+      <h1>Mirage of Solara</h1>
+      <div class=rl></div>
+      <div id=sub>Procedural WebGPU Desert Realm</div>
+    </div>
+    <div id=dk>
+      <div id=sw>
+        <div id=l>
+          <div id=lt><span id=s>Shaping night dunes…</span><span id=pc>0%</span></div>
+          <div id=p><i id=b></i></div>
+          <div id=w hidden>Use Google Chrome for optimal WebGPU experience</div>
+        </div><button id=d>Begin Journey <span>→</span></button>
+      </div><a id=gh href="https://github.com/Ayushman-00" target=_blank rel=noopener><svg viewBox="0 0 16 16">
+          <path
+            d="M8 0c4.42 0 8 3.58 8 8a8.013 8.013 0 0 1-5.45 7.59c-.4.08-.55-.17-.55-.38 0-.27.01-1.13.01-2.2 0-.75-.25-1.23-.54-1.48 1.78-.2 3.65-.88 3.65-3.95 0-.88-.31-1.59-.82-2.15.08-.2.36-1.02-.08-2.12 0 0-.67-.22-2.2.82-.64-.18-1.32-.27-2-.27-.68 0-1.36.09-2 .27-1.53-1.03-2.2-.82-2.2-.82-.44 1.1-.16 1.92-.08 2.12-.51.56-.82 1.28-.82 2.15 0 3.06 1.86 3.75 3.64 3.95-.23.2-.44.55-.51 1.07-.46.21-1.61.55-2.33-.66-.15-.24-.6-.83-1.23-.82-.67.01-.27.38.01.53.34.19.73.9.82 1.13.16.45.68 1.31 2.69.94 0 .67.01 1.3.01 1.49 0 .21-.15.45-.55.38A7.995 7.995 0 0 1 0 8c0-4.42 3.58-8 8-8Z" />
+        </svg>github.com/Ayushman-00</a>
+    </div>
+  </div><button id=sb aria-label=Settings><svg viewBox="0 0 24 24">
+      <path
+        d="M19.14 12.94a7.5 7.5 0 0 0 .05-.94 7.5 7.5 0 0 0-.05-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.2 7.2 0 0 0-1.63-.94l-.36-2.54a.5.5 0 0 0-.49-.42h-3.84a.5.5 0 0 0-.49.42l-.36 2.54c-.58.23-1.13.55-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.71 8.84a.5.5 0 0 0 .12.64l2.03 1.58a7.5 7.5 0 0 0-.05.94c0 .32.02.64.05.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.5.39 1.05.71 1.63.94l.36 2.54a.5.5 0 0 0 .49.42h3.84a.5.5 0 0 0 .49-.42l.36-2.54c.58-.23 1.13-.55 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58ZM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Z" />
+    </svg></button>
+  <aside id=sp>
+    <div class=sh><span>Resolution & Detail</span><span id=rL>—</span></div>
+    <div id=q><button>Low</button><button>Medium</button><button>High</button></div>
+    <div class=rw><button id=tA class="tg on">Audio: On</button><button id=tS class=tg>Stats: Off</button></div>
+    <div class=sh><span>Movement & Keys</span><span>Free Flight</span></div>
+    <div class=kl><i><b>W</b><b>A</b><b>S</b><b>D</b></i><span>Move</span><i><b>Q</b><b>E</b></i><span>Down /
+        Up</span><i><b>Space</b></i><span>Ascend</span><i><b>Shift</b></i><span>Sprint</span><i><b>Mouse</b></i><span>Look</span><i><b>1</b>–<b>6</b></i><span>Scenes</span><i><b>M</b></i><span>Mute</span><i><b>H</b></i><span>Stats</span><i><b>Esc</b></i><span>Unlock</span>
+    </div>
+    <div id=hm>Hold to glide · Slide to steer · Two fingers to sprint</div><a class=gl
+      href="https://github.com/Ayushman-00" target=_blank rel=noopener>github.com/Ayushman-00 ↗</a>
+  </aside>
+  <div id=hud>
+    <div id=cap></div>
+    <div id=bar><button data-s=0><b>1</b>Sandstorm</button><button data-s=1><b>2</b>Night View</button><button
+        data-s=2><b>3</b>Starry Ridge</button><button data-s=3><b>4</b>Sand Citadel</button><button
+        data-s=4><b>5</b>Cavern Oasis</button><button data-s=5><b>6</b>Golden Sunset</button></div>
+  </div>
+  <pre id=i></pre>
+  <script>(async () => {
+      const st = matchMedia("(pointer:coarse)").matches, $n = navigator.deviceMemory, Rt = (t, e) => { try { localStorage[t] = e } catch { } }; let Pt = [], me, Zn; try { Pt = (localStorage.ms10 || "").split(","), Zn = localStorage.msl10 } catch { } me = Pt[0] ? +Pt[0] : st ? $n > 7 ? 1 : 2 : $n <= 4 ? 2 : 0, Zn && me < 2 && (Pt = [++me], Rt("ms10", me)); const Y0 = 1 << me, i0 = me ? 2048 : 4096, rt = me > 1 ? 1 : 4, j0 = me > 1 ? 256 : 512, Qn = me > 1 ? 12 : 22, { sin: le, cos: oe, sqrt: Ye, min: Ee, max: ne, abs: ge, floor: Ae, PI: pt, pow: ye, atan2: $0, hypot: K, exp: vt, round: we } = Math, fe = pt * 2, nrm = a => { const l = K(...a) || 1; return a.map(v => v / l) }; let qt = 20261201; const y = () => { qt = qt + 1831565813 | 0; let t = Math.imul(qt ^ qt >>> 15, 1 | qt); return t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t, ((t ^ t >>> 14) >>> 0) / 4294967296 }, b = (t, e) => t + (e - t) * y(), ke = t => { qt = 20261201 + Math.imul(t, 7919) | 0 }, he = (t, e, c) => t < e ? e : t > c ? c : t, ae = (t, e, c) => t + (e - t) * c, je = (t, e, c) => (c = he((c - t) / (e - t), 0, 1), c * c * (3 - 2 * c)), dt = (t, e, c) => { let r = Math.imul(t, 374761393) + Math.imul(e, 668265263) + Math.imul(c, 1274126177) | 0; return r = Math.imul(r ^ r >>> 13, 1274126177), ((r ^ r >>> 16) >>> 0) / 4294967296 }, Ur = (t, e, c) => { const r = Ae(t), o = Ae(e), l = Ae(c); let s = t - r, n = e - o, u = c - l; s = s * s * (3 - 2 * s), n = n * n * (3 - 2 * n), u = u * u * (3 - 2 * u); return ae(ae(ae(dt(r, o, l), dt(r + 1, o, l), s), ae(dt(r, o + 1, l), dt(r + 1, o + 1, l), s), n), ae(ae(dt(r, o, l + 1), dt(r + 1, o, l + 1), s), ae(dt(r, o + 1, l + 1), dt(r + 1, o + 1, l + 1), s), n), u) }, mt = (t, e, c, r = 4) => { let o = .5, l = 0; for (let s = 0; s < r; s++)l += o * Ur(t, e, c), t = t * 2.03 + 17.1, e = e * 2.03 + 31.7, c = c * 2.03 + 5.3, o *= .5; return l / (1 - 2 * o) }, ot = (t, e, c, r) => { const o = K(t, e, c) || 1, l = le(r / 2) / o; return [t * l, e * l, c * l, oe(r / 2)] }, Vt = (t, e) => [t[3] * e[0] + t[0] * e[3] + t[1] * e[2] - t[2] * e[1], t[3] * e[1] - t[0] * e[2] + t[1] * e[3] + t[2] * e[0], t[3] * e[2] + t[0] * e[1] - t[1] * e[0] + t[2] * e[3], t[3] * e[3] - t[0] * e[0] - t[1] * e[1] - t[2] * e[2]], Tt = () => { const t = [b(-1, 1), b(-1, 1), b(-1, 1), b(-1, 1)], e = K(...t) || 1; return t.map(c => c / e) }, Z0 = (t, e, c) => { if (e < -.9999) return [1, 0, 0, 0]; const r = [c, 0, -t, 1 + e], o = K(...r); return r.map(l => l / o) }, J = 512, se = 80, $e = 512, Re = 1.15, it = -294.4, gt = -52, et = -294.4, ie = 16, xt = 36.8, Q0 = 7, OY = -32, OX = -74, OZ = 108, CX = 108, CZ = -88, CYAW = -.7854, CC = oe(CYAW), CS = le(CYAW), pal = (x, z) => [CX + x * CC + z * CS, CZ - x * CS + z * CC], pC = pal(0, 64), pT = pal(0, -18);
+      const SC = [{ n: "Sandstorm", d: "Nocturnal desert tornado funnel — thin touchdown widening into lightning storm canopy", v: [24, 8, 34, -26, 16, -24], sun: nrm([.24, .28, -.929]), sc: [.66, .78, 1.08, .82], st: [.016, .032, .085, .95], sh: [.09, .12, .21, 0], fc: [.06, .07, .11, .003], ac: [.095, .12, .205, 1], fx: [0, .28, .92, OY], ex: 1.02, ry: .24 }, { n: "Night View", d: "Soothing sapphire cosmos, glowing moon, dense starfield & Milky Way", v: [-100, 6.2, -20, -94, 14, -126], sun: nrm([.24, .22, -.945]), sc: [.68, .84, 1.2, .95], st: [.018, .04, .105, 1], sh: [.085, .152, .285, 0], fc: [.045, .085, .17, .0025], ac: [.095, .148, .26, .03], fx: [0, .32, .95, OY], ex: 1.04, ry: .18 }, { n: "Starry Ridge", d: "High overlook under overflowing starfield, Milky Way rift & shooting stars", v: [-122, 4.8, 16, -48, 36, -54], sun: nrm([.76, .22, -.61]), sc: [.44, .58, .96, 1], st: [.008, .018, .055, .72], sh: [.035, .072, .16, 0], fc: [.02, .04, .09, .002], ac: [.056, .088, .175, .02], fx: [0, .25, 1, OY], ex: 1.08, ry: .14 }, { n: "Sand Citadel", d: "Fairytale moonlit castle with glowing spires, royal walkway & twin reflecting pools", v: [pC[0], 15.5, pC[1], pT[0], 10, pT[1]], sun: nrm([-.38, .36, -.852]), sc: [.72, .86, 1.22, .92], st: [.016, .036, .098, 1], sh: [.072, .135, .26, 0], fc: [.036, .07, .148, .0022], ac: [.092, .14, .255, .04], fx: [0, .3, .94, OY], ex: 1.02, ry: .18 }, { n: "Cavern Oasis", d: "Moonlit grotto oasis with glowing skylight beams, crystals & triple waterfalls", v: [-10, 10.5, 134, -82, -27, 104], sun: nrm([.36, .52, -.774]), sc: [.74, .9, 1.26, .88], st: [.016, .038, .1, 1], sh: [.07, .14, .265, 0], fc: [.034, .078, .155, .0024], ac: [.095, .155, .265, .04], fx: [0, .32, .93, OY], ex: 1.05, ry: .22 }, { n: "Golden Sunset", d: "Liquid-gold dunes, crisp molten setting sun & breaching Shai-Hulud sandworm", v: [66, 5.2, 118, -68, 6, 44], sun: nrm([-.87, .125, -.476]), sc: [2.95, 1.02, .26, .16], st: [.038, .038, .15, 0], sh: [.96, .24, .055, 1], fc: [.48, .16, .075, .0025], ac: [.22, .12, .17, .1], fx: [.35, .85, .12, OY], ex: .72, ry: .28 }];
+      let curS = 1;
+      function Jn(t, e, c, r) { let o = new Float32Array(1048576), l = 0, s = new Uint32Array(1 << 21), n = 0; const u = e * c; let f = new Int32Array(u), m = new Int32Array(u); for (let x = 0; x < r - 1; x++) { for (let A = 0; A < c - 1; A++) { let E = e * (A + c * x); for (let N = 0; N < e - 1; N++, E++) { const L = t[E], i = t[E + 1], S = t[E + e], v = t[E + e + 1], B = t[E + u], q = t[E + u + 1], O = t[E + u + e], C = t[E + u + e + 1], z = L > 0 | (i > 0) << 1 | (S > 0) << 2 | (v > 0) << 3 | (B > 0) << 4 | (q > 0) << 5 | (O > 0) << 6 | (C > 0) << 7; if (z === 0 || z === 255) continue; let k = 0, M = 0, U = 0, Q = 0, j; if (L > 0 != i > 0 && (j = L / (L - i), k += j, Q++), S > 0 != v > 0 && (j = S / (S - v), k += j, M += 1, Q++), B > 0 != q > 0 && (j = B / (B - q), k += j, U += 1, Q++), O > 0 != C > 0 && (j = O / (O - C), k += j, M += 1, U += 1, Q++), L > 0 != S > 0 && (j = L / (L - S), M += j, Q++), i > 0 != v > 0 && (j = i / (i - v), M += j, k += 1, Q++), B > 0 != O > 0 && (j = B / (B - O), M += j, U += 1, Q++), q > 0 != C > 0 && (j = q / (q - C), M += j, k += 1, U += 1, Q++), L > 0 != B > 0 && (j = L / (L - B), U += j, Q++), i > 0 != q > 0 && (j = i / (i - q), U += j, k += 1, Q++), S > 0 != O > 0 && (j = S / (S - O), U += j, M += 1, Q++), v > 0 != C > 0 && (j = v / (v - C), U += j, k += 1, M += 1, Q++), l * 3 + 3 > o.length) { const ce = new Float32Array(o.length * 2); ce.set(o), o = ce } const ze = l++; o[ze * 3] = N + k / Q, o[ze * 3 + 1] = A + M / Q, o[ze * 3 + 2] = x + U / Q; const re = N + e * A; if (f[re] = ze, n + 18 > s.length) { const ce = new Uint32Array(s.length * 2); ce.set(s), s = ce } const X = L > 0; let F, G, _, $; i > 0 !== X && A > 0 && x > 0 && (F = ze, G = f[re - e], _ = m[re - e], $ = m[re], X ? (s[n++] = F, s[n++] = G, s[n++] = _, s[n++] = F, s[n++] = _, s[n++] = $) : (s[n++] = F, s[n++] = _, s[n++] = G, s[n++] = F, s[n++] = $, s[n++] = _)), S > 0 !== X && N > 0 && x > 0 && (F = ze, G = m[re], _ = m[re - 1], $ = f[re - 1], X ? (s[n++] = F, s[n++] = G, s[n++] = _, s[n++] = F, s[n++] = _, s[n++] = $) : (s[n++] = F, s[n++] = _, s[n++] = G, s[n++] = F, s[n++] = $, s[n++] = _)), B > 0 !== X && N > 0 && A > 0 && (F = ze, G = f[re - 1], _ = f[re - 1 - e], $ = f[re - e], X ? (s[n++] = F, s[n++] = G, s[n++] = _, s[n++] = F, s[n++] = _, s[n++] = $) : (s[n++] = F, s[n++] = _, s[n++] = G, s[n++] = F, s[n++] = $, s[n++] = _)) } } const h = f; f = m, m = h } return { pos: o.subarray(0, l * 3), idx: s.subarray(0, n), nv: l, ni: n } }
+      const es = (t, e, c, r) => (o, l, s) => { o = he(o, 0, e - 1.001), l = he(l, 0, c - 1.001), s = he(s, 0, r - 1.001); const n = o | 0, u = l | 0, f = s | 0, m = o - n, x = l - u, h = s - f, A = n + e * (u + c * f), E = e * c; return ae(ae(ae(t[A], t[A + 1], m), ae(t[A + e], t[A + e + 1], m), x), ae(ae(t[A + E], t[A + E + 1], m), ae(t[A + E + e], t[A + E + e + 1], m), x), h) };
+      class Et { constructor() { this.p = [], this.i = [], this.aux = [] } v(e, c, r, o = 1) { return this.p.push(e, c, r), this.aux.push(o), this.p.length / 3 - 1 } tri(e, c, r) { this.i.push(e, c, r) } quad(e, c, r, o) { this.i.push(e, c, r, e, r, o) } add(m, dx = 0, dy = 0, dz = 0, sx = 1, sy = 1, sz = 1) { const o = this.p.length / 3; for (let k = 0; k < m.p.length; k += 3)this.v(m.p[k] * sx + dx, m.p[k + 1] * sy + dy, m.p[k + 2] * sz + dz, m.aux[k / 3]); for (let k = 0; k < m.i.length; k += 3)this.tri(m.i[k] + o, m.i[k + 1] + o, m.i[k + 2] + o) } box(cx, cy, cz, wx, wy, wz, ao = .65) { const hx = wx / 2, hy = wy / 2, hz = wz / 2, F = [[[cx - hx, cy - hy, cz + hz], [cx + hx, cy - hy, cz + hz], [cx + hx, cy + hy, cz + hz], [cx - hx, cy + hy, cz + hz]], [[cx + hx, cy - hy, cz - hz], [cx - hx, cy - hy, cz - hz], [cx - hx, cy + hy, cz - hz], [cx + hx, cy + hy, cz - hz]], [[cx + hx, cy - hy, cz + hz], [cx + hx, cy - hy, cz - hz], [cx + hx, cy + hy, cz - hz], [cx + hx, cy + hy, cz + hz]], [[cx - hx, cy - hy, cz - hz], [cx - hx, cy - hy, cz + hz], [cx - hx, cy + hy, cz + hz], [cx - hx, cy + hy, cz - hz]], [[cx - hx, cy + hy, cz + hz], [cx + hx, cy + hy, cz + hz], [cx + hx, cy + hy, cz - hz], [cx - hx, cy + hy, cz - hz]], [[cx - hx, cy - hy, cz - hz], [cx + hx, cy - hy, cz - hz], [cx + hx, cy - hy, cz + hz], [cx - hx, cy - hy, cz + hz]]]; for (const f of F) { const a = this.v(...f[0], ao), b = this.v(...f[1], ao), c = this.v(...f[2], ao), d = this.v(...f[3], ao); this.quad(a, b, c, d) } } sweep(e, c, r, o, l = !0, ao = .65) { const s = []; for (let n = 0; n < e.length; n++) { const u = e[n], f = e[ne(n - 1, 0)], m = e[Ee(n + 1, e.length - 1)]; let x = m[0] - f[0], h = m[1] - f[1], A = m[2] - f[2]; const E = K(x, h, A) || 1; x /= E, h /= E, A /= E; const N = o ? o(u, n) : [0, 1, 0]; let L = N[1] * A - N[2] * h, i = N[2] * x - N[0] * A, S = N[0] * h - N[1] * x; const v = K(L, i, S) || 1; L /= v, i /= v, S /= v; const B = h * S - A * i, q = A * L - x * S, O = x * i - h * L, C = typeof c == "function" ? c(n) : c, z = typeof r == "function" ? r(n) : r, k = [[-1, -1], [1, -1], [1, 1], [-1, 1]].map(([U, Q]) => [u[0] + L * U * C / 2 + B * Q * z / 2, u[1] + i * U * C / 2 + q * Q * z / 2, u[2] + S * U * C / 2 + O * Q * z / 2]), M = []; for (let U = 0; U < 4; U++)M.push(this.v(...k[U], ao), this.v(...k[(U + 1) % 4], ao)); if (s.push(M), l && (n === 0 || n === e.length - 1)) { const U = k.map(Q => this.v(...Q, ao)); n === 0 ? this.quad(U[0], U[1], U[2], U[3]) : this.quad(U[3], U[2], U[1], U[0]) } } for (let n = 0; n < s.length - 1; n++)for (let u = 0; u < 4; u++)this.quad(s[n][u * 2], s[n + 1][u * 2], s[n + 1][u * 2 + 1], s[n][u * 2 + 1]) } tube(e, c, r = 6, o = !0, l = null) { const s = []; let n = .31, u = .9, f = .3; for (let m = 0; m < e.length; m++) { const x = e[m], h = e[ne(m - 1, 0)], A = e[Ee(m + 1, e.length - 1)]; let E = A[0] - h[0], N = A[1] - h[1], L = A[2] - h[2]; const i = K(E, N, L) || 1; E /= i, N /= i, L /= i; let S = u * L - f * N, v = f * E - n * L, B = n * N - u * E; const q = K(S, v, B) || 1; S /= q, v /= q, B /= q, n = N * B - L * v, u = L * S - E * B, f = E * v - N * S; const O = typeof c == "function" ? c(m) : c, C = []; for (let z = 0; z < r; z++) { const k = z / r * fe; C.push(this.v(x[0] + (S * oe(k) + n * le(k)) * O, x[1] + (v * oe(k) + u * le(k)) * O, x[2] + (B * oe(k) + f * le(k)) * O, l ? l(m) : Ee(1, .35 + .65 * m / (e.length - 1)))) } s.push(C) } for (let m = 0; m < s.length - 1; m++)for (let x = 0; x < r; x++) { const h = (x + 1) % r; this.quad(s[m][x], s[m][h], s[m + 1][h], s[m + 1][x]) } if (o) { const m = e[e.length - 1], x = this.v(m[0], m[1], m[2], l ? l(e.length - 1) : 1), h = s[s.length - 1]; for (let A = 0; A < r; A++)this.tri(h[A], h[(A + 1) % r], x) } } build(e) { const c = this.p.length / 3, r = this.p, o = this.i, l = new Float32Array(c * 3); for (let f = 0; f < o.length; f += 3) { const m = o[f] * 3, x = o[f + 1] * 3, h = o[f + 2] * 3, A = r[x] - r[m], E = r[x + 1] - r[m + 1], N = r[x + 2] - r[m + 2], L = r[h] - r[m], i = r[h + 1] - r[m + 1], S = r[h + 2] - r[m + 2], v = E * S - N * i, B = N * L - A * S, q = A * i - E * L; for (const O of [m, x, h]) l[O] += v, l[O + 1] += B, l[O + 2] += q } const s = new ArrayBuffer(c * 16), n = new Float32Array(s), u = new Int8Array(s); for (let f = 0; f < c; f++) { let m = l[f * 3], x = l[f * 3 + 1], h = l[f * 3 + 2]; if (e) { const E = e(r[f * 3], r[f * 3 + 1], r[f * 3 + 2], m, x, h); m = E[0], x = E[1], h = E[2] } const A = K(m, x, h) || 1; n[f * 4] = r[f * 3], n[f * 4 + 1] = r[f * 3 + 1], n[f * 4 + 2] = r[f * 3 + 2], u[f * 16 + 12] = we(m / A * 127), u[f * 16 + 13] = we(x / A * 127), u[f * 16 + 14] = we(h / A * 127), u[f * 16 + 15] = we(he(this.aux[f], -1, 1) * 127) } return { vb: s, ib: new Uint32Array(o), nv: c } } }
+      function _r(t, e) { const c = new Et, r = (1 + Ye(5)) / 2; let o = [[-1, r, 0], [1, r, 0], [-1, -r, 0], [1, -r, 0], [0, -1, r], [0, 1, r], [0, -1, -r], [0, 1, -r], [r, 0, -1], [r, 0, 1], [-r, 0, -1], [-r, 0, 1]].map(s => { const n = K(...s); return s.map(u => u / n) }), l = [[0, 11, 5], [0, 5, 1], [0, 1, 7], [0, 7, 10], [0, 10, 11], [1, 5, 9], [5, 11, 4], [11, 10, 2], [10, 7, 6], [7, 1, 8], [3, 9, 4], [3, 4, 2], [3, 2, 6], [3, 6, 8], [3, 8, 9], [4, 9, 5], [2, 4, 11], [6, 2, 10], [8, 6, 7], [9, 8, 1]]; for (let s = 0; s < t; s++) { const n = new Map, u = [], f = (m, x) => { const h = m < x ? m * 65536 + x : x * 65536 + m; let A = n.get(h); if (A === void 0) { const E = [0, 1, 2].map(L => o[m][L] + o[x][L]), N = K(...E); o.push(E.map(L => L / N)), A = o.length - 1, n.set(h, A) } return A }; for (const [m, x, h] of l) { const A = f(m, x), E = f(x, h), N = f(h, m); u.push([m, A, N], [x, E, A], [h, N, E], [A, E, N]) } l = u } for (const s of o) { const n = e ? e(s[0], s[1], s[2]) : s; c.v(n[0], n[1], n[2]) } for (const s of l) c.tri(s[0], s[1], s[2]); return c }
+      const ts = "fn ss(a:f32,b:f32,x:f32)->f32{let t=clamp((x-a)/(b-a),0.,1.);return t*t*(3.-2.*t);}fn h31(p:vec3f)->f32{var q=fract(p*vec3f(.1031,.1030,.0973));q+=dot(q,q.yzx+33.33);return fract((q.x+q.y)*q.z);}fn h33(p:vec3f)->vec3f{var q=fract(p*vec3f(.1031,.1030,.0973));q+=dot(q,q.yxz+33.33);return fract((q.xxy+q.yxx)*q.zyx);}fn vn(p:vec3f)->f32{let i=floor(p);let f=fract(p);let u=f*f*(3.-2.*f);return mix(mix(mix(h31(i),h31(i+vec3f(1.,0.,0.)),u.x),mix(h31(i+vec3f(0.,1.,0.)),h31(i+vec3f(1.,1.,0.)),u.x),u.y),mix(mix(h31(i+vec3f(0.,0.,1.)),h31(i+vec3f(1.,0.,1.)),u.x),mix(h31(i+vec3f(0.,1.,1.)),h31(i+vec3f(1.,1.,1.)),u.x),u.y),u.z);}fn fbm(p:vec3f,n:i32)->f32{var a=.5;var s=0.;var q=p;for(var i=0;i<n;i++){s+=a*vn(q);q=q*2.03+vec3f(17.1,31.7,5.3);a*=.5;}return s/(1.-2.*a);}fn wor(p:vec3f)->f32{let i=floor(p);let f=fract(p);var d=9.;for(var x=-1;x<=1;x++){for(var y=-1;y<=1;y++){for(var z=-1;z<=1;z++){let o=vec3f(f32(x),f32(y),f32(z));let r=o+h33(i+o)-f;d=min(d,dot(r,r));}}}return sqrt(d);}", Ir = ts + "struct U{n:vec4u,o:vec4f,c:vec4u};@group(0)@binding(0)var<uniform>u:U;@group(0)@binding(1)var<storage,read_write>D:array<f32>;@group(0)@binding(2)var<storage,read>P:array<vec4f>;fn smax(a:f32,b:f32,k:f32)->f32{let h=max(k-abs(a-b),0.)/k;return max(a,b)+h*h*k*.25;}fn smin(a:f32,b:f32,k:f32)->f32{return-smax(-a,-b,k);}fn seg2(p:vec2f,a:vec2f,b:vec2f)->f32{let pa=p-a;let ba=b-a;return length(pa-ba*clamp(dot(pa,ba)/max(dot(ba,ba),1e-4),0.,1.));}fn dens(p:vec3f)->f32{let w=vec3f(fbm(p*.022+11.,3),fbm(p*.022+47.,3),fbm(p*.022+83.,3))-.5;let q=p+w*vec3f(16.,4.5,16.);let mac=5.6*(fbm(vec3f(q.xz*.0055,3.1),3)-.5);let p1=p.x*.043+p.z*.02+2.5*(fbm(vec3f(p.xz*.009,1.9),3)-.5);let a1=p1+.44*sin(p1);let c1=1.-sqrt(sin(a1)*sin(a1)+.018);let p2=-p.x*.016+p.z*.035+1.9*(fbm(vec3f(p.xz*.012,5.4),3)-.5);let c2=1.-sqrt(sin(p2)*sin(p2)+.024);let mic=.8*(fbm(vec3f(p.xz*.038,9.2),2)-.5);var g0=-27.5+mac+c1*7.4+c2*3.6+mic;let pD=length(p.xz-vec2f(-74.,108.)+w.xz*5.);g0=mix(g0,-24.5+mic*.5,(1.-ss(64.,96.,pD))*.85);var oFl=-37.2+5.2*ss(21.,36.,pD)+7.5*ss(34.,60.,pD)+mic*.35;oFl+=(1.-ss(4.5,12.5,length(p.xz-vec2f(-70.,106.)+w.xz*2.2)))*7.;g0=mix(g0,oFl,1.-ss(34.,66.,pD));g0=mix(g0,-12.6+mic*.12,1.-ss(64.,84.,length(p.xz-vec2f(108.,-88.)+w.xz*2.)));g0+=(1.-ss(8.,38.,seg2(p.xz,vec2f(-142.,26.),vec2f(-114.,4.))))*25.5;g0+=(1.-ss(7.,34.,seg2(p.xz,vec2f(54.,106.),vec2f(80.,134.))))*23.;let rad=length(p.xz)+w.x*17.;let lowD=max(ss(.35,.9,(-p.x*.87-p.z*.48)/max(rad,1.)),ss(.35,.9,(-p.x*.1-p.z*.99)/max(rad,1.)));g0+=ss(238.,278.,rad)*(32.-lowD*21.);let tn=3.5*(fbm(vec3f(q.xz*.055,2.),3)-.5);var dm=-1e3;var de=1e3;var k=0u;for(var i=0u;i<u.c.x;i++){let a=P[k];let b=P[k+1u];k+=2u;let yr=clamp((p.y-g0)/max(b.y-g0,3.),0.,1.3);var e=seg2(q.xz,a.xy,a.zw)-b.x;e-=b.z*ss(.3,.92,yr)+4.8*(1.-yr)*(1.-yr)-b.w*ss(0.,.5,yr)*(1.-ss(.5,1.,yr));dm=smax(dm,smin(-e,b.y+tn-p.y,3.5),3.5);de=min(de,e);}var clr=0.;let kc=(u.c.x+u.c.y)*2u;for(var i=0u;i<u.c.w;i++){let a=P[kc+i*2u];let b=P[kc+i*2u+1u];clr=max(clr,1.-ss(0.,b.y,seg2(q.xz,a.xy,a.zw)-b.x));}let pl=max(ss(.56,.63,fbm(vec3f(q.xz*.0085,1.7),4))*(1.-clr),ss(248.,278.,rad)*(1.-lowD*.75));let th=g0+pl*(20.+14.*fbm(vec3f(q.xz*.02,5.),2));var d=smax(g0+4.2*ss(14.,0.,de)-p.y,dm,4.);d=smax(d,(th-p.y)*.72,4.);let cr=length(vec3f((p.x+92.+w.x*4.)/39.,(p.y+31.+w.y*2.5)/29.,(p.z-103.+w.z*4.)/39.));let mt=ss(-62.,-82.,p.x+(p.z-108.)*.28+w.x*6.);let oc=ss(9.5,14.5,length(p.xz-vec2f(-90.,103.)+w.xz*2.8));d=smax(d,(4.5-abs(cr-1.)*30.-(1.-mt)*18.-(1.-oc)*ss(-20.,-10.,p.y)*18.)*step(-33.,p.y),3.);k=u.c.x*2u;for(var i=0u;i<u.c.y;i++){let a=P[k];let b=P[k+1u];k+=2u;var r=p+w*vec3f(3.,2.,3.)-a.xyz;let cs=cos(a.w);let sn=sin(a.w);r=vec3f(cs*r.x+sn*r.z,r.y/b.z,-sn*r.x+cs*r.z);d=smax(d,b.y-length(vec2f(length(r.xy)-b.x,r.z)),2.);}let rk=ss(2.,7.5,p.y-g0);d+=rk*((.5-wor(p*.11+w*1.5))*2.8+(.5-wor(p*.26+7.))*1.1+(fbm(p*.2,3)-.5)*1.9+1.9*(abs(fract(p.y*.24+w.y*.8)-.5)-.25));return min(d,38.-p.y);}@compute@workgroup_size(4,4,4)fn main(@builtin(global_invocation_id)id:vec3u){if(any(id>=u.n.xyz)){return;}var d=dens(u.o.xyz+vec3f(id)*u.o.w);if(id.x==0u||id.z==0u||id.x==u.n.x-1u||id.z==u.n.z-1u||id.y==u.n.y-1u){d=-1.;}D[id.x+u.n.x*(id.y+u.n.y*id.z)]=d;}", Nt = "@vertex fn vs(@builtin(vertex_index)i:u32)->@builtin(position)vec4f{return vec4f(f32(i32(i&1u)*4-1),f32(i32(i>>1u)*4-1),0.,1.);}", Dr = ts + Nt + "fn hp(p:vec2f,per:f32)->f32{return h31(vec3f(p-per*floor(p/per),per));}fn tn(p:vec2f,per:f32)->f32{let i=floor(p);let f=fract(p);let u=f*f*(3.-2.*f);return mix(mix(hp(i,per),hp(i+vec2f(1.,0.),per),u.x),mix(hp(i+vec2f(0.,1.),per),hp(i+vec2f(1.,1.),per),u.x),u.y);}fn tf(uv:vec2f,per:f32,n:i32)->f32{var a=.5;var s=0.;var pr=per;for(var i=0;i<n;i++){s+=a*tn(uv*pr+f32(i)*7.3,pr);pr*=2.;a*=.5;}return s/(1.-2.*a);}fn tw(p:vec2f,per:f32)->vec3f{let i=floor(p);let f=fract(p);var d=vec2f(9.);var id=0.;for(var x=-1;x<=1;x++){for(var y=-1;y<=1;y++){let o=vec2f(f32(x),f32(y));let c=i+o;let hh=h33(vec3f(c-per*floor(c/per),per));let r=o+hh.xy-f;let l=dot(r,r);if(l<d.x){d.y=d.x;d.x=l;id=hh.z;}else if(l<d.y){d.y=l;}}}return vec3f(sqrt(d),id);}fn H(uv:vec2f)->f32{let w=uv+.11*(vec2f(tf(uv,3.,4),tf(uv+.5,3.,4))-.5);let f=tf(w,3.,8);let r1=1.-abs(tf(w+1.7,5.,6)*2.-1.);let cr=min(abs(tf(w+4.1,4.,5)*2.-1.)*7.,1.);let c2=min(abs(tf(w.yx+2.3,9.,4)*2.-1.)*9.,1.);let pt=tw(w*29.,29.);return f*.5+r1*r1*.24+cr*c2*.26-(1.-ss(0.,.34,pt.x))*step(.62,pt.z)*.07;}@fragment fn fs(@builtin(position)fc:vec4f)->@location(0)vec4f{let u=fc.xy/1024.;let e=1./1024.;let h=H(u);let s=clamp(vec2f(H(u+vec2f(e,0.))-H(u-vec2f(e,0.)),H(u+vec2f(0.,e))-H(u-vec2f(0.,e)))*38.4,vec2f(-1.),vec2f(1.));return vec4f(-s*.5+.5,h,tf(u+3.7,3.,5));}", Gr = Nt + "@group(0)@binding(0)var t:texture_2d<f32>;@group(0)@binding(1)var s:sampler;fn uo(fc:vec4f,k:f32)->vec2f{return fc.xy*k/vec2f(textureDimensions(t));}@fragment fn fsMip(@builtin(position)fc:vec4f)->@location(0)vec4f{return textureSampleLevel(t,s,uo(fc,2.),0.);}fn kr(c:vec3f)->vec4f{let w=1./(1.+max(c.r,max(c.g,c.b)));return vec4f(c*w,w);}@fragment fn fsDown0(@builtin(position)fc:vec4f)->@location(0)vec4f{let u=uo(fc,2.);let e=1./vec2f(textureDimensions(t));let m=kr(min(textureSampleLevel(t,s,u+e*vec2f(-1.,-1.),0.).rgb,vec3f(14.)))+kr(min(textureSampleLevel(t,s,u+e*vec2f(1.,-1.),0.).rgb,vec3f(14.)))+kr(min(textureSampleLevel(t,s,u+e*vec2f(-1.,1.),0.).rgb,vec3f(14.)))+kr(min(textureSampleLevel(t,s,u+e*vec2f(1.,1.),0.).rgb,vec3f(14.)));return vec4f(m.rgb/m.a,1.);}@fragment fn fsDown(@builtin(position)fc:vec4f)->@location(0)vec4f{let u=uo(fc,2.);let e=1./vec2f(textureDimensions(t));return(textureSampleLevel(t,s,u+e*vec2f(-1.,-1.),0.)+textureSampleLevel(t,s,u+e*vec2f(1.,-1.),0.)+textureSampleLevel(t,s,u+e*vec2f(-1.,1.),0.)+textureSampleLevel(t,s,u+e*vec2f(1.,1.),0.))*.25;}@fragment fn fsUp(@builtin(position)fc:vec4f)->@location(0)vec4f{let u=uo(fc,.5);let e=.75/vec2f(textureDimensions(t));return(textureSampleLevel(t,s,u+e*vec2f(-1.,-1.),0.)+textureSampleLevel(t,s,u+e*vec2f(1.,-1.),0.)+textureSampleLevel(t,s,u+e*vec2f(-1.,1.),0.)+textureSampleLevel(t,s,u+e*vec2f(1.,1.),0.))*.25;}", Wr = Nt + `@group(0)@binding(0)var<uniform>tm:vec4f;fn sw(u:vec2f,t:f32)->f32{var a=0.;var q=u*6.2831853;for(var n=1;n<=4;n++){let f=f32(n);let tt=t*(.38+.2*f);q+=vec2f(sin(q.y+tt),cos(q.x-tt*.8))*.68;a+=(.5+.5*sin(q.x*f+tt)*cos(q.y*f-tt*.7))/f;}return clamp(a*.58,0.,1.);}fn ca(u:vec2f,t:f32)->f32{let p=u*6.2831853;var i=p;var c=0.;for(var n=1;n<=4;n++){let tt=t*(1.-3./f32(n));i=p+vec2f(cos(tt-i.x)+sin(tt+i.y),sin(tt-i.y)+cos(tt+i.x));let s=sin(i.x+tt);let k=cos(i.y+tt);c+=abs(s*k)/(1.25*sqrt(s*s+k*k)+1e-4);}return pow(abs(1.15-pow(c/4.,1.4)),6.);}const WK=array<vec3f,8>(vec3f(1.,2.,1.),vec3f(-2.,1.,.85),vec3f(3.,1.,.55),vec3f(1.,-4.,.45),vec3f(4.,3.,.35),vec3f(-3.,5.,.28),vec3f(6.,-2.,.22),vec3f(5.,7.,.16));@fragment fn fs(@builtin(position)fc:vec4f)->@location(0)vec4f{let u=fc.xy/${j0}.;let t=tm.x;var s=vec2f(0.);for(var i=0;i<8;i++){let k=WK[i];s+=k.xy*k.z*cos(dot(k.xy,u)*6.2831853+t*(.7+.4*sqrt(length(k.xy)))*select(-1.,1.,(i&1)==0)+f32(i)*1.9);}return vec4f(sw(u-vec2f(t*.09,t*.04),t*.7+11.),ca(u,t*.4+7.),s*.055);}`, J0 = `struct G{vp:mat4x4f,sm:mat4x4f,cam:vec4f,right:vec4f,up:vec4f,fwd:vec4f,sun:vec4f,res:vec4f,mis:vec4f,sc:vec4f,st:vec4f,sh:vec4f,fc:vec4f,ac:vec4f,fx:vec4f};const TAU=6.2831853;const LOW=${me > 1};fn sat(x:f32)->f32{return clamp(x,0.,1.);}fn ss(a:f32,b:f32,x:f32)->f32{let t=clamp((x-a)/(b-a),0.,1.);return t*t*(3.-2.*t);}fn ign(p:vec2f)->f32{return fract(52.9829189*fract(dot(p,vec2f(.06711056,.00583715))));}fn hs(x:f32)->f32{return fract(sin(x*127.1)*43758.5453);}fn h33q(p:vec3f)->vec3f{var q=fract(p*vec3f(.1031,.1030,.0973));q+=dot(q,q.yxz+33.33);return fract((q.xxy+q.yxx)*q.zyx);}fn vn3(p:vec3f)->f32{let i=floor(p);let f=fract(p);let u=f*f*(3.-2.*f);return mix(mix(mix(h33q(i).x,h33q(i+vec3f(1.,0.,0.)).x,u.x),mix(h33q(i+vec3f(0.,1.,0.)).x,h33q(i+vec3f(1.,1.,0.)).x,u.x),u.y),mix(mix(h33q(i+vec3f(0.,0.,1.)).x,h33q(i+vec3f(1.,0.,1.)).x,u.x),mix(h33q(i+vec3f(0.,1.,1.)).x,h33q(i+vec3f(1.,1.,1.)).x,u.x),u.y),u.z);}fn fb3(p:vec3f)->f32{var s=0.;var a=.5;var q=p;for(var i=0;i<4;i++){s+=a*vn3(q);q=q*2.04+vec3f(13.1,29.7,7.3);a*=.5;}return s/.9375;}fn fin(c:vec3f)->vec4f{return vec4f(min(max(c,vec3f(0.)),vec3f(32.)),1.);}`, Wt = J0 + `@group(0)@binding(0)var<uniform>g:G;@group(0)@binding(1)var sR:sampler;@group(0)@binding(2)var sC:sampler;@group(0)@binding(3)var sS:sampler_comparison;@group(0)@binding(4)var tSh:texture_depth_2d;@group(0)@binding(5)var tW:texture_2d<f32>;@group(0)@binding(6)var tD:texture_2d<f32>;@group(0)@binding(7)var tV:texture_3d<f32>;@group(0)@binding(8)var tM:texture_2d<f32>;fn skyB(rd:vec3f)->vec3f{let u=rd.y;let mu=max(dot(rd,g.sun.xyz),0.);let iS=g.sh.w*ss(.35,.08,g.sun.y);let mc=mix(mix(g.st.rgb,g.sh.rgb,.46),vec3f(.46,.12,.2),iS);var c=mix(mix(g.st.rgb,mc,pow(1.-sat(u),1.5)),g.sh.rgb,pow(1.-sat(u),3.2));c+=g.sc.rgb*g.sh.w*(pow(mu,6.)*.16+pow(mu,36.)*.34*(1.-g.ac.w*.5))+vec3f(.42,.6,.9)*g.st.w*(pow(mu,5.)*.22+pow(mu,26.)*.44+pow(mu,110.)*.58)+vec3f(.04,.1,.14)*g.fx.z*exp(-pow((u-.05)/.07,2.))*.5;return mix(g.fc.rgb*(.75+.25*pow(mu,3.)),c,ss(-.06,.03,u));}fn shU(p:vec3f)->vec3f{let s=g.sm*vec4f(p,1.);return vec3f(s.x*.5+.5,.5-s.y*.5,s.z-.0012);}fn sh1(p:vec3f)->f32{let s=shU(p);return textureSampleCompareLevel(tSh,sS,s.xy,s.z);}fn sh4(p:vec3f)->f32{let s=shU(p);let e=1.8/${i0}.;return(textureSampleCompareLevel(tSh,sS,s.xy+vec2f(-e,-e),s.z)+textureSampleCompareLevel(tSh,sS,s.xy+vec2f(e,-e),s.z)+textureSampleCompareLevel(tSh,sS,s.xy+vec2f(-e,e),s.z)+textureSampleCompareLevel(tSh,sS,s.xy+vec2f(e,e),s.z))*.25;}fn sh9(p:vec3f)->f32{if(LOW){return sh1(p);}let s=shU(p);let e=2.1/${i0}.;var a=0.;for(var x=-1;x<=1;x++){for(var y=-1;y<=1;y++){a+=textureSampleCompareLevel(tSh,sS,s.xy+vec2f(f32(x),f32(y))*e,s.z);}}return a/9.;}fn vol(p:vec3f)->vec4f{return textureSampleLevel(tV,sC,(p-vec3f(-294.4,-52.,-294.4))/vec3f(588.8,92.,588.8),0.);}fn sunE(p:vec3f)->vec3f{let sw=textureSampleLevel(tW,sR,p.xz*.008-vec2f(g.mis.w*.05,g.mis.w*.02),2.).r;return g.sc.rgb*(1.-g.ac.w*(.22-.18*sw));}fn amb(p:vec3f,n:vec3f,sky:f32)->vec3f{let u=n.y*.5+.5;let b=mix(vec3f(.62,.28,.12),vec3f(.07,.13,.24),g.fx.z)*g.fx.y;return g.ac.rgb*mix(vec3f(.62,.48,.76),vec3f(.72,.84,1.12),g.fx.z)*(.26+.74*sky)*(.28+.72*u*u)+b*(1.-u)*(.2+.8*sky)+vec3f(.002,.003,.007);}fn fog(c:vec3f,wp:vec3f)->vec3f{let v=wp-g.cam.xyz;let d=length(v);let rd=v/max(d,1e-4);let hF=.52+.78*exp(-max((g.cam.y+wp.y)*.5+32.,0.)*.045);let T=exp(-g.fc.w*d*hF)*ss(375.,290.,d);let mu=max(dot(rd,g.sun.xyz),0.);let hz=mix(g.fc.rgb*(.75+.22*vol(g.cam.xyz+rd*min(d,200.)).g)+g.sc.rgb*.09*pow(mu,6.),skyB(rd),ss(-.02,.18,rd.y));return mix(hz,c,T);}fn qrot(q:vec4f,v:vec3f)->vec3f{return v+2.*cross(q.xyz,cross(q.xyz,v)+q.w*v);}`, Xr = Wt + "struct VI{@location(0)p:vec3f,@location(1)n:vec4f,@location(2)a:vec4f,@location(3)b:vec4f,@location(4)c:vec4f};struct VO{@builtin(position)cp:vec4f,@location(0)wp:vec3f,@location(1)n:vec3f,@location(2)op:vec3f,@location(3)on:vec3f,@location(4)@interpolate(flat)m:vec4f,@location(5)@interpolate(flat)q:vec4f,@location(6)ao:f32};@vertex fn vs(i:VI)->VO{var o:VO;var sc=i.a.w;if(i.c.x<1.5&&i.c.z>1.5&&g.res.x>0.){sc*=1.-ss(i.c.z*.7,i.c.z,distance(i.a.xyz,g.cam.xyz)/g.mis.z);}var w=i.a.xyz+qrot(i.b,i.p*sc);w.y+=sin(g.cam.w*1.6+i.c.y*40.)*i.c.w;o.cp=g.vp*vec4f(w,1.);o.wp=w;o.n=qrot(i.b,i.n.xyz);o.op=i.p*i.a.w+i.c.y*37.;o.on=i.n.xyz;o.m=i.c;o.q=i.b;o.ao=i.n.w;return o;}struct TP{h:f32,c:f32,n:vec3f};fn tri(p:vec3f,n:vec3f,s:f32)->TP{var w=pow(abs(n),vec3f(4.));w/=(w.x+w.y+w.z);let x=textureSample(tD,sR,p.zy*s);let y=textureSample(tD,sR,p.xz*s);let z=textureSample(tD,sR,p.xy*s);var o:TP;o.h=x.b*w.x+y.b*w.y+z.b*w.z;o.c=x.a*w.x+y.a*w.y+z.a*w.z;let a=x.rg*2.-1.;let b=y.rg*2.-1.;let c=z.rg*2.-1.;o.n=vec3f(0.,a.y,a.x)*w.x+vec3f(b.x,0.,b.y)*w.y+vec3f(c.x,c.y,0.)*w.z;return o;}@fragment fn fs(i:VO,@builtin(front_facing)ff:bool)->@location(0)vec4f{let mat=i32(i.m.x+.5);let sd=i.m.y;let fl_=select(-1.,1.,ff);let on=normalize(i.on)*fl_;let n0=normalize(i.n)*fl_;let dist=length(i.wp-g.cam.xyz);let ts=select(1.,i.m.z,mat>=2);let A=tri(i.op,on,.08*ts);let B=tri(i.op,on,.36*ts);let C=tri(i.op,on,1.6*ts);let F=tri(i.op,on,6.2*ts);let fk=ss(15.,1.5,dist)*f32(mat<=2);let Wd=textureSample(tD,sR,vec2f(i.op.x*.08,(i.op.y+i.op.z)*.65));let big=textureSample(tD,sR,i.op.xz*.009+i.op.y*.014).a;let b2=textureSample(tD,sR,i.op.zx*.024+i.op.y*.032+.37).a;let gm=textureSample(tM,sC,i.wp.xz/588.8+.5);let oc=textureSample(tW,sR,i.wp.xz*.18).g;let drf=textureSample(tW,sR,i.wp.xz*.035-vec2f(g.mis.w*.22,g.mis.w*.11)).r;let hgt=A.h*.5+B.h*.35+C.h*.15;var bump=1.2;var gloss=.08;var alb=vec3f(0.);var emi=vec3f(0.);var vao=1.;var sgro=0.;var rip=0.;var sMask=0.;if(mat<=1){let st=i.op.y*.52+A.h*1.4+big*3.6+b2*2.2;let bed=hs(floor(st));let sf=fract(st);var rk=mix(vec3f(.44,.19,.09),vec3f(.66,.4,.2),sat(A.c*1.4-.2));rk=mix(rk,mix(vec3f(.72,.52,.32),vec3f(.28,.12,.06),step(.58,bed)),ss(.35,.68,big)*.68)*mix(.76,1.14,bed)*(1.-.42*ss(.14,0.,sf)*(1.-abs(on.y)));rk=mix(rk,vec3f(.16,.09,.06),ss(.52,.78,b2)*(1.-abs(n0.y))*.45)*(.36+1.05*hgt)*mix(1.,.72+.56*F.h,fk);rk=mix(rk,vec3f(.1,.42,.12)*(.65+.5*B.h),ss(.3,.75,gm.r)*ss(-33.,-12.,i.wp.y)*(1.-ss(-10.,6.,i.wp.y))*ss(.34,.7,B.c)*.78);emi+=ss(.35,.85,gm.r)*ss(-.1,-.85,n0.y)*ss(-32.,-6.,i.wp.y)*vec3f(.05,.38,.42)*(.5+.5*oc);sgro=-ss(.16,0.,sf)*(1.-abs(on.y))*1.1;if(mat==0){let sM=ss(.52,.80,n0.y+(big-.5)*.22)*(1.-gm.b*.28);var sn=mix(vec3f(.76,.46,.19),vec3f(.92,.66,.34),sat(A.c*1.35-.18));sn=mix(sn,vec3f(.58,.30,.12),ss(.48,.76,b2)*.35)*(.86+.26*B.h)*mix(1.,.86+.28*F.h,fk);sn=mix(sn,vec3f(.94,.68,.36),g.ac.w*ss(.42,.82,drf)*.32);let wt=ss(-29.8,-31.95,i.wp.y)*gm.r;sn=mix(sn,sn*vec3f(.44,.4,.32),wt*.8);let tf=ss(.18,.68,gm.r)*ss(-31.8,-27.2,i.wp.y)*sM*ss(.18,.58,B.c+.32);sn=mix(sn,mix(vec3f(.1,.48,.1),vec3f(.24,.64,.14),B.h)*(.75+.45*A.c),tf*.94);alb=mix(rk,sn,sM);bump=mix(1.55,.26,sM);gloss=mix(.06,.18+wt*.6,sM);sgro*=(1.-sM);rip=sM*(1.-tf*.85)*ss(88.,4.,dist)*cos((i.wp.x*.84+i.wp.z*.54)*8.5+A.c*8.5+B.c*2.4)*(.45+.55*gm.g)*.62;sMask=sM*(1.-wt)*(1.-tf);}else{let dT=ss(.55,.88,n0.y);alb=mix(rk,vec3f(.74,.5,.26)*(.8+.35*B.h),dT*.62);bump=mix(1.5,.5,dT);}}else if(mat==2){let cy=fract(i.op.y*.9);let cx=fract((i.op.x+i.op.z)*.5+floor(i.op.y*.9)*.5);let mt=ss(0.,.065,min(cy,1.-cy))*ss(0.,.045,min(cx,1.-cx));let bk=hs(floor(i.op.y*.9)*17.3+floor((i.op.x+i.op.z)*.5+floor(i.op.y*.9)*.5)*9.1);var st=mix(vec3f(.76,.64,.50),vec3f(.94,.86,.74),bk)*(.74+.36*B.h)*(.66+.34*mt);let iW=ss(.24,.28,i.ao)*(1.-ss(.34,.38,i.ao));let iC=ss(.40,.44,i.ao)*(1.-ss(.50,.54,i.ao));let iD=ss(.74,.79,i.ao)*(1.-ss(.87,.9,i.ao));let iT=ss(.88,.9,i.ao)*(1.-ss(.94,.96,i.ao));let iG=ss(.94,.96,i.ao);let crp=mix(vec3f(.56,.06,.10),vec3f(.92,.68,.18),ss(.70,.85,abs(sin(i.op.x*2.4)*cos(i.op.z*2.4))))*(.82+.26*B.h);let dm=mix(vec3f(.86,.84,.88),vec3f(.98,.96,.94),sat(n0.y*.5+.5))*(.88+.12*sin(atan2(i.op.z,i.op.x)*16.))*(.88+.18*B.h);let tl=mix(vec3f(.06,.22,.52),vec3f(.14,.42,.78),sat(.72+.28*sin((i.op.x+i.op.z)*5.)*cos(i.op.y*5.)))*(.84+.26*B.h);alb=mix(mix(mix(mix(mix(st,vec3f(1.,.72,.32),iW),crp,iC),dm,iD),tl,iT),vec3f(1.,.78,.24)*(.84+.28*B.h),iG);let wy=fract(i.op.y*.18+.3);let wx=fract((i.op.x+i.op.z)*.24+.5);let wn=ss(.18,.10,abs(wx-.5))*ss(.28,.13,abs(wy-.5)+abs(wx-.5)*.45)*(1.-iW)*(1.-iC)*(1.-iD)*(1.-iT)*(1.-iG)*(1.-abs(on.y))*step(2.4,i.op.y);let flk=.88+.12*sin(g.cam.w*5.+bk*40.);let upL=g.fx.z*ss(34.,-2.,i.wp.y)*(.16+.12*iD+.14*iG)*(1.-iC);emi=vec3f(3.6,1.65,.42)*(wn+iW*1.25)*flk*(.25+g.fx.z*1.7)+mix(vec3f(.38,.26,.14),vec3f(.16,.30,.64),iT)*upL;bump=mix(.72,.20,max(iD,max(iT,iG)));gloss=mix(.14,mix(.6,mix(.84,.96,iG),max(iT,iG)),max(iD,max(iT,iG)));}else if(mat==3){alb=mix(vec3f(.3,.21,.13),vec3f(.56,.44,.3),Wd.b)*(.65+.5*B.h)*(.72+.28*sin(i.op.y*15.+A.c*4.));gloss=.06;bump=.9;}else if(mat==4){let h=fract(sd*7.31);alb=mix(mix(vec3f(.15,.34,.14),vec3f(.24,.46,.17),h)*(.55+.65*B.h)*(.75+.25*C.h),vec3f(.78,.68,.42),ss(.76,.96,C.h)*.32);vao=i.ao;gloss=.14;bump=1.1;}else if(mat==6){let fk2=.82+.18*sin(g.cam.w*7.+sd*50.)*cos(g.cam.w*4.7+sd*21.);alb=mix(vec3f(1.,.76,.32),vec3f(.32,.95,.92),step(.78,sd));emi=mix(vec3f(5.5,2.2,.45),vec3f(1.2,4.4,4.8),step(.78,sd))*fk2*(.62+g.fx.z*1.2);bump=.1;gloss=.6;}else{let h=fract(sd*5.73);alb=mix(mix(vec3f(.34,.25,.17),vec3f(.46,.34,.22),h)*(.55+.65*B.h)*(.55+.65*i.ao),vec3f(.86,.24,.2),ss(.8,1.,i.ao)*step(.5,h)*.8);gloss=.08;bump=1.1;}let N=normalize(qrot(i.q,normalize(on+(A.n*.8+B.n*.6+C.n*.4*ss(75.,12.,dist)+F.n*.42*fk)*bump+vec3f(.84*rip,sgro,.54*rip))));let L=g.sun.xyz;let V=normalize(g.cam.xyz-i.wp);let H=normalize(V+L);let v1=vol(i.wp+n0*2.);let v2=vol(i.wp+n0*6.);let ao=(sat((v1.r-.5)*8.)*.55+sat((v2.r-.5)*2.7)*.45)*vao*ss(.1,.55,hgt);let E=sunE(i.wp)*sh9(i.wp+n0*.45);let nJ=normalize(vec3f(N.x,N.y*.42,N.z));let ndl=mix(sat(dot(N,L)),sat(dot(nJ,L)*1.55),sMask);let am=amb(i.wp,N,v1.g)*ao;var c=alb*(E*ndl*(1.+ss(-31.8,-32.5,i.wp.y)*gm.r*oc*1.6)+am)+emi;let oSp=pow(sat(dot(N,H)),16.)*.44*sMask*ndl*mix(vec3f(1.,.78,.42),vec3f(.72,.86,1.1),g.fx.z);let gN=normalize(N+(h33q(floor(i.wp*14.))-.5)*1.15);let glt=pow(sat(dot(gN,H)),96.)*ss(56.,2.,dist)*sMask*(.5+.5*ndl);let rim=pow(1.-sat(dot(N,V)),3.4)*(.28+.72*sat(dot(n0,L)*.5+.5))*sMask*mix(g.sc.rgb*.52,vec3f(.55,.78,1.15),g.fx.z)*.52;c+=E*(pow(sat(dot(N,H)),mix(12.,72.,gloss))*gloss*.65*ndl+oSp+glt*3.8)+rim+skyB(reflect(-V,N))*ao*(.04+gloss*.55)*pow(1.-sat(dot(N,V)),3.2)*.42;return fin(fog(c,i.wp));}", Hr = Wt + "override ROWS:f32=7.;override FAR:f32=220.;struct LI{@location(0)a:vec4f,@location(1)b:vec4f,@location(2)c:vec4f};struct LO{@builtin(position)cp:vec4f,@location(0)wp:vec3f,@location(1)n:vec3f,@location(2)uv:vec2f,@location(3)@interpolate(flat)col:vec3f,@location(4)@interpolate(flat)pr:vec4f,@location(5)@interpolate(flat)sd:vec2f,@location(6)@interpolate(flat)spc:vec3f};fn sway(p:vec2f,h:f32,t:f32)->vec2f{let ph=dot(p,vec2f(.035,.022));let a=.026*pow(max(h,0.),1.18)*(1.+g.ac.w*2.4);return a*(vec2f(.84,.54)*(sin(t*(1.+g.ac.w*2.2)+ph+h*.14)+g.ac.w*.75)+vec2f(-.54,.84)*sin(t*(2.5+g.ac.w*3.)+ph*2.7+h*.42)*.32);}@vertex fn vs(@builtin(vertex_index)vi:u32,i:LI)->LO{var o:LO;let u=f32(vi&1u)*2.-1.;let v=sin(f32(vi>>1u)/(ROWS-1.)*1.5708);let ty=i32(i.c.x*255.+.5);let s1=i.c.y;let s2=i.c.z;let t=g.cam.w;let ln=i.a.w;let hA=i.b.w;let cy=cos(i.b.x);let sy=sin(i.b.x);let ct=cos(i.b.y);let st=sin(i.b.y);let d=vec3f(st*cy,ct,st*sy);let pe=vec3f(ct*cy,-st,ct*sy);let sd=vec3f(-sy,0.,cy);var col=vec3f(0.);var pr=vec4f(0.);var spc=vec3f(1.,.85,.45);var shp=vec2f(.6,.5);var wav=1.;var fls=1.;switch ty{case 0{col=mix(mix(vec3f(.56,.44,.15),vec3f(.78,.6,.2),s1),vec3f(.26,.56,.16),step(.6,s2));pr=vec4f(.15,.85,0.,0.);shp=vec2f(.45,.3);wav=1.4;}case 1{col=vec3f(.44,.34,.15);pr=vec4f(0.,.25,0.,0.);shp=vec2f(.08,.12);wav=.35;fls=.4;}case 2{col=mix(mix(vec3f(.08,.5,.12),vec3f(.24,.66,.16),s1),vec3f(.38,.64,.16),step(.8,s2));pr=vec4f(.05,.88,0.,0.);shp=vec2f(.52,.42);wav=1.15;fls=.85;}case 3{col=mix(vec3f(.32,.36,.24),vec3f(.44,.42,.26),s1);pr=vec4f(.08,.45,0.,0.);shp=vec2f(.65,.55);wav=.9;}case 4{col=mix(vec3f(.72,.52,.22),vec3f(.86,.68,.34),s1);pr=vec4f(.22,.85,0.,0.);shp=vec2f(.5,.35);wav=1.6;}case 5{col=mix(mix(vec3f(.96,.14,.48),vec3f(.98,.54,.1),step(.45,s1)),vec3f(.98,.4,.8),step(.72,s2));pr=vec4f(.14,.8,0.,.24);spc=vec3f(1.,.85,.7);shp=vec2f(.65,.58);fls=1.4;}case 6{col=mix(vec3f(.12,.52,.16),vec3f(.08,.38,.14),s1);pr=vec4f(0.,.65,0.,.06);shp=vec2f(.45,.32);wav=1.5;}case 8{col=mix(vec3f(.78,.1,.16),mix(vec3f(.10,.36,.78),vec3f(.92,.68,.16),step(.66,s1)),step(.34,s1));pr=vec4f(0.,.35,.35,0.);spc=vec3f(1.,.84,.28);shp=vec2f(.2,.06);wav=2.3;fls=1.9;}case 9{col=vec3f(.36,.88,.92);pr=vec4f(0.,0.,.95,0.);spc=vec3f(1.,1.,1.);shp=vec2f(.3,.08);wav=.4;fls=.3;}default{col=mix(vec3f(.1,.52,.2),vec3f(.2,.64,.24),s1);pr=vec4f(.05,.45,0.,0.);shp=vec2f(.5,.35);wav=.5;fls=.45;}}let k=(i.c.w-.3)*2.+sin(t*(1.+g.ac.w*2.2+s1)*fls+s2*40.+hA*.25)*(.1+g.ac.w*.18)*fls;let wp=v*(3.+4.*s2)+s1*30.+t*(1.4+g.ac.w*2.4);let wv=sin(wp)*.09*wav;let kq=k*1.7;let ka=select(kq,.06,abs(kq)<.06);let sK=sin(ka*v);let cK=cos(ka*v);let c=i.a.xyz+ln*(d*(sK/ka)+pe*((1.-cK)/ka+wv*v));let N=normalize(pe*cK-d*(sK+wv+cos(wp)*.08*wav*v*(3.+4.*s2)));let tw=(s1-.5)*2.*v+sin(t*1.1+s2*20.)*.2*v;let S=sd*cos(tw)+N*sin(tw);let N2=N*cos(tw)-sd*sin(tw);let sh=select(pow(max(sin(3.14159*pow(v,shp.x)),0.),shp.y),mix(1.,.35,v),ty==8||ty==9);let sp_=g.res.x==0.;let far=FAR*g.mis.z;let fK=select((1.-ss(far*.8,far,distance(i.a.xyz,g.cam.xyz)))*ss(.5,1.8,distance(c,g.cam.xyz)),1.,sp_);var p=c+S*(u*fK*select(i.b.z*.5*sh,select(max(i.b.z*.5,.08)*sh,0.,ty==1),sp_));let sw=select(sway(i.a.xz,hA+max(p.y-i.a.y,0.)+v*ln*.45,t),vec2f(0.),ty==9);p.x+=sw.x;p.z+=sw.y;o.cp=g.vp*vec4f(p,1.);o.wp=p;o.n=normalize(N2+S*u*.45);o.uv=vec2f(u,v);o.col=col;o.pr=pr;o.sd=vec2f(s1,s2);o.spc=spc;return o;}struct GO{@builtin(position)cp:vec4f,@location(0)uv:vec2f,@location(1)@interpolate(flat)col:vec3f};@vertex fn vsGl(@builtin(vertex_index)vi:u32,@location(0)a:vec4f,@location(1)b:vec4f)->GO{var o:GO;let q=vec2f(f32(vi&1u),f32(vi>>1u))*2.-1.;let t=g.cam.w;let p=a.xyz+.42*vec3f(sin(t*.7+b.x*50.),sin(t*.9+b.x*70.)*.8,cos(t*.8+b.x*90.));let d=length(p-g.cam.xyz);if(d>155.||dot(p-g.cam.xyz,g.fwd.xyz)<-1.){o.cp=vec4f(0.,0.,2.,1.);return o;}let tw=pow(.5+.5*sin(t*(.9+1.5*hs(b.x))+b.x*100.),3.);let sz=min(max(b.z,d*.0026),d*.0052);o.cp=g.vp*vec4f(p+(g.right.xyz*q.x+g.up.xyz*q.y)*sz,1.);o.uv=q;let e=b.z/sz;o.col=mix(mix(vec3f(1.,.86,.4),vec3f(.45,1.,.9),b.y)*sh1(p)*sunE(p).r*(.14+tw*1.6),mix(vec3f(1.,.78,.24),vec3f(.42,.92,1.),b.y)*(.7+tw*2.8),g.fx.z)*e*e*exp(-g.fc.w*d)*ss(.4,1.8,d)*7.5;return o;}@fragment fn fsGl(i:GO)->@location(0)vec4f{let r=dot(i.uv,i.uv);return vec4f(min(i.col*exp(-r*7.)*(1.-ss(.7,1.,r)),vec3f(8.)),0.);}@fragment fn fs(i:LO,@builtin(front_facing)ff:bool)->@location(0)vec4f{var n=normalize(i.n);if(!ff){n=-n;}let V=normalize(g.cam.xyz-i.wp);let L=g.sun.xyz;let lt=textureSample(tD,sR,vec2f(i.uv.x*.15+i.sd.x*3.7,i.uv.y*.9+i.sd.y*5.3));let wf=textureSample(tD,sR,vec2f(i.uv.x*.45+i.sd.x,i.uv.y*2.4-g.cam.w*1.75)).a;let w2=textureSample(tD,sR,vec2f(i.uv.x*.9+i.sd.y,i.uv.y*4.4-g.cam.w*2.6)).b;let vv=vol(i.wp+vec3f(0.,1.,0.));let E=sunE(i.wp)*sh1(i.wp+L*.4);let ndl=dot(n,L);var alb=i.col*(.76+.24*ss(0.,.25,abs(i.uv.x)))*mix(.6,1.18,i.uv.y)*(.68+.65*lt.b);if(i.pr.z>.8){let fm=ss(.3,.75,wf*.6+w2*.4)+ss(.72,1.,i.uv.y)*.65+ss(.14,0.,i.uv.y)*.55;return fin(fog(mix(vec3f(.14,.78,.82),vec3f(1.),sat(fm))*(sunE(i.wp)*.85+amb(i.wp,n,1.)*1.5)+vec3f(.16,.40,.46)*fm,i.wp));}if(i.pr.z>.2){alb=mix(i.col*(.75+.45*lt.b),i.spc,sat(ss(.76,.88,abs(i.uv.x))+ss(.86,.94,i.uv.y)));}let tr=(max(-ndl,0.)*.85+.15)*i.pr.y;let am=(amb(i.wp,n,vv.g)+amb(i.wp,-n,vv.g)*i.pr.y*.35)*(.35+.65*sat((vv.r-.5)*6.)*mix(.45,1.,i.uv.y));var c=E*(alb*max(ndl,0.)+alb*vec3f(1.25,1.08,.65)*tr*.78)+alb*am+alb*i.pr.w*.28+E*(pow(sat(dot(n,normalize(V+L))),28.)*.24+alb*i.pr.y*pow(sat(dot(-V,L)),3.)*.95);return fin(fog(c,i.wp));}", Kr = Wt + "struct VI{@location(0)p:vec3f,@location(1)n:vec4f,@location(2)a:vec4f,@location(3)b:vec4f};struct VO{@builtin(position)cp:vec4f,@location(0)wp:vec3f,@location(1)n:vec3f,@location(2)op:vec3f,@location(3)@interpolate(flat)sd:f32,@location(4)ao:f32};fn wP(s:f32,R:f32,t:f32,sd:f32)->vec3f{let w=s/R;return vec3f(sin(w*1.7+t*.9+sd*9.)*3.,cos(w)*30.-12.,s);}@vertex fn vsW(i:VI)->VO{var o:VO;let t=g.cam.w;let R=i.a.w;let sc=i.b.z;let cy=cos(i.b.w);let sy=sin(i.b.w);let s=(fract(t*i.b.y+i.b.x)*2.-1.)*R*3.4+i.p.z*sc;let p0=wP(s,R,t,i.b.x);let T=normalize(wP(s+.6,R,t,i.b.x)-p0);let Rt=normalize(cross(vec3f(0.,1.,0.),T));let Up=cross(T,Rt);let lc=p0+(Rt*i.p.x+Up*i.p.y)*sc;let w=i.a.xyz+vec3f(cy*lc.x+sy*lc.z,lc.y,-sy*lc.x+cy*lc.z);let nl=Rt*i.n.x+Up*i.n.y+T*i.n.z;o.cp=g.vp*vec4f(w,1.);o.wp=w;o.n=vec3f(cy*nl.x+sy*nl.z,nl.y,-sy*nl.x+cy*nl.z);o.op=i.p;o.sd=i.b.x;o.ao=i.n.w;return o;}@fragment fn fsW(i:VO)->@location(0)vec4f{let tx=textureSample(tD,sR,vec2f(i.op.z*.22,atan2(i.op.y,i.op.x)*.75)+i.sd);let n=normalize(i.n+(vec3f(tx.r,tx.g,0.)-.5)*.52);let L=g.sun.xyz;let V=normalize(g.cam.xyz-i.wp);let rg=fract(i.op.z*.55);let sm=ss(.05,.2,rg)*ss(.97,.8,rg);let fg=step(15.,i.op.z)*step(.85,i.ao);let maw=step(.02,step(12.2,i.op.z)*step(i.ao,.2));var a=mix(vec3f(.14,.10,.07),vec3f(.46,.36,.24),sm*(.45+.55*tx.b));a=mix(mix(mix(a,vec3f(.78,.61,.38),ss(.35,.88,n.y)*.58),vec3f(.02,.015,.012),maw),vec3f(.95,.90,.78),fg);let E=sunE(i.wp)*sh4(i.wp+n*.7);var c=a*(E*sat(dot(n,L))*(1.-maw*.92)+amb(i.wp,n,.85)*(.3+.7*sm)*(1.-maw*.88))+E*pow(sat(dot(n,normalize(V+L))),42.)*(.15+.75*fg)*sat(dot(n,L));return fin(fog(c,i.wp));}@vertex fn vsT(i:VI)->VO{var o:VO;let t=g.cam.w;let st=g.ac.w;let rn=fract(t*i.b.y*(.45+st*2.1)+i.b.x)*i.a.w;let ag=rn/max(i.b.z,.2);let cy=cos(i.b.w);let sy=sin(i.b.w);let dr=vec3f(cy,0.,sy);let sd=vec3f(-sy,0.,cy);let ca=cos(ag);let sa=sin(ag);let lp=vec3f(i.p.x*ca-i.p.y*sa,i.p.x*sa+i.p.y*ca,i.p.z)*i.b.z;let w=i.a.xyz+dr*(rn-i.a.w*.5)+vec3f(0.,i.b.z*.7+abs(sin(rn*.62+i.b.x*20.))*(.25+st*.85)*i.b.z,0.)+dr*lp.x+vec3f(0.,lp.y,0.)+sd*lp.z;let wp2=mix(i.a.xyz+dr*(rn-i.a.w*.5),w,ss(0.,5.,rn)*ss(i.a.w,i.a.w-5.,rn));o.cp=g.vp*vec4f(wp2,1.);o.wp=wp2;o.n=normalize(dr*(i.n.x*ca-i.n.y*sa)+vec3f(0.,i.n.x*sa+i.n.y*ca,0.)+sd*i.n.z);o.op=i.p;o.sd=i.b.x;o.ao=i.n.w;return o;}@fragment fn fsT(i:VO)->@location(0)vec4f{let tx=textureSample(tD,sR,i.op.xz*1.4+i.sd);let n=normalize(i.n);let a=mix(vec3f(.32,.24,.14),vec3f(.56,.44,.26),tx.b)*(.55+.45*i.ao);return fin(fog(a*(sunE(i.wp)*sh1(i.wp+vec3f(0.,.3,0.))*(.25+.75*sat(dot(n,g.sun.xyz)))+amb(i.wp,n,1.)),i.wp));}", Yr = Wt + "struct VO{@builtin(position)cp:vec4f,@location(0)wp:vec3f,@location(1)@interpolate(flat)kd:f32};@vertex fn vs(@builtin(vertex_index)i:u32,@builtin(instance_index)ii:u32)->VO{var o:VO;let p=vec2f(f32(i&1u),f32(i>>1u))*2.-1.;if(ii==0u){o.wp=vec3f(-74.+p.x*46.,g.fx.w,108.+p.y*46.);o.kd=0.;}else{let sg=select(-1.,1.,ii==2u);let lx=sg*15.5+p.x*5.65;let lz=14.+p.y*17.9;o.wp=vec3f(108.+lx*.7071-lz*.7071,-9.92,-88.+lx*.7071+lz*.7071);o.kd=1.;}o.cp=g.vp*vec4f(o.wp,1.);return o;}@fragment fn fs(i:VO)->@location(0)vec4f{let V=normalize(g.cam.xyz-i.wp);let s=(textureSample(tW,sR,i.wp.xz/7.5).ba+textureSample(tW,sR,i.wp.zx/3.4+.25).ba*.65)*select(.6+.7*g.ac.w,.16,i.kd>.5);let n=normalize(vec3f(s.x*.12,1.,s.y*.12));let fr=.08+.92*pow(1.-sat(dot(n,V)),select(4.2,3.2,i.kd>.5));let R=reflect(-V,n);let rf=skyB(R)+g.sc.rgb*g.sh.w*pow(max(dot(R,g.sun.xyz),0.),170.)*5.5+vec3f(.78,.88,1.)*g.st.w*pow(max(dot(R,g.sun.xyz),0.),100.)*3.2;let oc=textureSample(tW,sR,i.wp.xz*.22).g;if(i.kd>.5){let pc=vec3f(.05,.62,.68)*(sunE(i.wp)*(.72+oc*.55)+amb(i.wp,vec3f(0.,1.,0.),1.)*1.4)+vec3f(.12,.22,.28)*g.fx.z;return fin(fog(mix(pc,rf,fr*.78),i.wp));}let sh=max(ss(22.,36.,length(i.wp.xz-vec2f(-74.,108.))),ss(14.,6.,length(i.wp.xz-vec2f(-70.,106.))));let fm=sat(ss(8.,1.5,length(i.wp.xz-vec2f(-106.,94.)))+ss(9.,1.5,length(i.wp.xz-vec2f(-110.,106.)))+ss(8.,1.5,length(i.wp.xz-vec2f(-102.,118.))))*(.5+.5*oc);let w=mix(vec3f(.02,.4,.48),vec3f(.12,.82,.72),sh)*(sunE(i.wp)*(.56+oc*.78)+amb(i.wp,vec3f(0.,1.,0.),1.)*1.5)+vec3f(.06,.24,.28)*g.fx.z+vec3f(.9,.98,.98)*fm*.75;return fin(fog(mix(w,rf,fr*.74),i.wp));}@vertex fn vsB(@builtin(vertex_index)i:u32)->VO{var o:VO;let p=vec2f(f32(i&1u),f32(i>>1u))*2.-1.;o.wp=g.cam.xyz+g.fwd.xyz+g.right.xyz*(p.x*g.right.w)+g.up.xyz*(p.y*g.up.w);o.cp=vec4f(p,1e-7,1.);o.kd=0.;return o;}fn stL(rd:vec3f,sc:f32,th:f32,t:f32)->vec3f{let q=rd*sc;let h=h33q(floor(q));let d=length(fract(q)-.5-(h-.5)*.56);let sC=mix(mix(vec3f(.62,.80,1.),vec3f(1.,.98,.94),h.x),vec3f(1.,.78,.54),ss(.7,1.,h.x));return sC*exp(-d*d*150.)*step(th,h.z)*(.76+.24*sin(t*(1.8+h.x*2.6)+h.z*210.))*(.5+1.45*pow(sat((h.z-th)/(1.-th)),1.4));}@fragment fn fsB(i:VO)->@location(0)vec4f{let rd=normalize(i.wp-g.cam.xyz);let u=rd.y;let mu=dot(rd,g.sun.xyz);let t=g.cam.w;var c=skyB(rd);let sD=1.-g.ac.w*.55;let cu=rd.xz/(max(u,0.)+.22)*.3+vec2f(t*.005,t*.002);let cl=ss(.46,.76,textureSampleLevel(tD,sR,cu,1.5).a*.65+textureSampleLevel(tD,sR,cu*2.3+.31,1.5).a*.35)*ss(.02,.28,u);let iS=g.sh.w*ss(.35,.08,g.sun.y);let cD=mix(g.sh.rgb*.7+g.sc.rgb*.22,mix(vec3f(.24,.09,.14),vec3f(1.42,.48,.14),pow(max(mu,0.),8.)),iS);let cN=mix(g.st.rgb*1.7+vec3f(.04,.07,.14),vec3f(.52,.68,.95),pow(max(mu,0.),5.)*g.st.w*.75);c=mix(c,mix(cD,cN,g.fx.z),cl*mix(.52,.22,g.fx.z));if(g.sh.w>.01){let radS=sqrt(max(1.-mu*mu,0.));let limb=1.-ss(0.,.062,radS);let sDisc=ss(.9977,.99825,mu)*g.sh.w*sD;c=mix(c,mix(vec3f(1.,.38,.08),vec3f(1.,.96,.82),pow(sat(limb),.45))*mix(4.2,6.2,iS),sDisc);c+=mix(g.sc.rgb,vec3f(1.,.52,.14),iS*.7)*(pow(max(mu,0.),380.)*1.55+exp(-abs(u-g.sun.y)*24.)*pow(max(mu,0.),14.)*iS*.42)*g.sh.w*sD;}let mV=g.st.w;let mR=select(.068,.076,mV>.9);let mD=ss(1.-mR*mR*.54,1.-mR*mR*.46,mu)*step(.05,mV);if(mD>.001){let r1=normalize(cross(vec3f(0.,1.,0.),g.sun.xyz));let u1=cross(g.sun.xyz,r1);let lp=vec2f(dot(rd,r1),dot(rd,u1))/mR;let mN=normalize(vec3f(lp.x,lp.y,sqrt(max(1.-dot(lp,lp),0.))));let lt=ss(-.04,.28,dot(mN,select(normalize(vec3f(.82,.18,.54)),normalize(vec3f(.12,.10,.98)),mV>.9)));let ma=textureSampleLevel(tD,sR,lp*.44+.48,0.).a;c=mix(c,mix(vec3f(.84,.9,1.),vec3f(1.,.98,.93),step(.9,mV))*(.72+.28*ma)*2.6*(.06+.94*lt),mD);}if(g.sc.w>.01&&u>-.02){let sv=g.sc.w*ss(.005,.18,u)*(1.-cl*.4)*(1.-mD*.95);let gN=normalize(vec3f(.72,.52,-.46));let lat=dot(rd,gN);let q3=rd*3.6;let w3=fb3(q3+vec3f(2.1,5.3,1.7));let n1=fb3(q3*2.1+vec3f(w3*1.5));let rf=fb3(q3*3.8-vec3f(w3*1.2));let bLat=lat+.14+(w3-.5)*.16;let band=exp(-pow(bLat/.26,2.));let core=exp(-pow(bLat/.10,2.))*ss(.22,.82,n1);let darkR=1.-.78*exp(-pow((bLat+(rf-.5)*.06)/.055,2.))*ss(.36,.74,rf);let mw=(vec3f(.18,.32,.64)*band*ss(.24,.8,n1)*.74+mix(vec3f(.48,.36,.74),vec3f(.96,.72,.50),ss(.42,.82,n1))*core*1.15)*darkR*(.8+.42*step(.92,g.sc.w));let stAll=stL(rd,110.,.915,t)*1.45+stL(rd,210.,.875-band*darkR*.09,t)*1.05+stL(rd,340.,.855-band*darkR*.08,t)*.72+stL(rd,520.,.87-band*darkR*.07,t)*.45;c+=(mw+stAll)*sv;let mp=fract(t*.15);let mi=floor(t*.15);let mV2=normalize(vec3f(.72,-.46,.22));let mP=normalize(normalize(vec3f(.25+hs(mi)-.5,.42+hs(mi+7.)*.32,-.86))+mV2*(mp*2.4-.7));let pj=dot(rd-mP,-mV2);let pp=length((rd-mP)+mV2*clamp(pj,0.,.16));c+=vec3f(.92,.97,1.)*exp(-pp*pp*65000.)*ss(.16,0.,pj)*step(0.,pj)*ss(0.,.05,mp)*ss(.3,.09,mp)*5.5*sv;}return fin(c);}", jr = Wt + "struct VO{@builtin(position)cp:vec4f,@location(0)uv:vec2f,@location(1)@interpolate(flat)pr:vec4f,@location(2)wp:vec3f};fn qd(i:u32)->vec2f{return vec2f(f32(i&1u),f32(i>>1u))*2.-1.;}@vertex fn vsB(@builtin(vertex_index)vi:u32,@location(0)a:vec4f,@location(1)b:vec4f)->VO{var o:VO;let q=qd(vi);let t=g.cam.w;let st=g.ac.w;let kd=b.w;if(kd<1.5&&st<.25){o.cp=vec4f(0.,0.,2.,1.);return o;}var p=vec3f(0.);var sz=a.w;var op=0.;var ht=0.;if(kd<.5){let hN=fract(b.x+t*b.y*.085);let h=hN*86.;let rad=1.4+pow(hN,1.55)*24.+pow(ss(.68,1.,hN),1.4)*36.;let bendX=sin(hN*3.4+t*.65)*10.*hN+sin(t*.42)*2.5;let bendZ=cos(hN*2.8-t*.55)*7.5*hN+cos(t*.37)*2.5;let ag=b.z*TAU+t*(6.2-hN*3.8)+hN*16.;p=vec3f(a.x+bendX+cos(ag)*rad,a.y+h,a.z+bendZ+sin(ag)*rad);sz=a.w*(.32+hN*1.75+ss(.70,1.,hN)*1.4);op=ss(0.,.03,hN)*ss(1.,.86,hN)*.78*ss(.25,.9,st);ht=hN;}else if(kd<1.5){let pg=fract(b.x+t*b.y*.22);let ag=b.z*TAU+t*5.4+pg*7.;let rd=2.2+pg*8.5;p=vec3f(a.x+cos(ag)*rd,a.y+pg*5.5,a.z+sin(ag)*rd);sz=a.w*(.35+pg*.65);op=ss(0.,.18,pg)*ss(1.,.45,pg)*.55*ss(.25,.9,st);ht=pg*.2;}else{let lf=fract(b.x+t*b.y*.32);let ag=b.z*TAU;let rd=5.+lf*19.;p=vec3f(a.x+cos(ag)*rd,a.y+lf*24.-lf*lf*15.,a.z+sin(ag)*rd);sz=a.w*(.85+lf*1.6);op=ss(0.,.15,lf)*ss(1.,.45,lf)*.52;ht=lf;}o.cp=g.vp*vec4f(p+(g.right.xyz*q.x*1.25+g.up.xyz*q.y*.92)*sz,1.);o.uv=q;o.wp=p;o.pr=vec4f(b.z,op*ss(7.,20.,length(p-g.cam.xyz)),ht,kd);return o;}@fragment fn fsB(i:VO)->@location(0)vec4f{let r=dot(i.uv,i.uv);let n1=textureSampleLevel(tD,sR,i.uv*.42+vec2f(i.pr.x*5.-g.mis.w*.26,i.pr.x*3.),0.).a;let n2=textureSampleLevel(tD,sR,i.uv*.95+vec2f(i.pr.x*7.-g.mis.w*.42,-i.pr.x*4.),0.).b;if(r>1.){discard;}let cl=exp(-r*2.1)*(1.-ss(.52,1.,r))*ss(.18,.72,n1*.58+n2*.42);let al=cl*i.pr.y;let ltn=pow(max(sin(g.cam.w*2.6)*sin(g.cam.w*7.1)*sin(g.cam.w*13.7),0.),22.)*step(i.pr.w,.5)*ss(.42,.95,i.pr.z)*ss(.48,.84,n2);let shd=sat(i.pr.z*.65+i.uv.y*.4+.35*n1);let c0=mix(vec3f(.12,.14,.22),vec3f(.56,.44,.38),shd)*sunE(i.wp)*.95+g.fc.rgb*.45+vec3f(1.9,2.2,3.4)*ltn*5.5;return vec4f(min(max(fog(c0,i.wp)*al,vec3f(0.)),vec3f(14.)),al);}@vertex fn vsS(@builtin(vertex_index)vi:u32,@location(0)a:vec4f)->VO{var o:VO;let q=qd(vi);let t=g.cam.w;let st=g.ac.w;let B=52.;let ws=.8+st*12.;var p=a.xyz*B+vec3f(t*ws*.84,sin(t*.8+a.x*40.)*.5+t*(.04+st*.25),t*ws*.54)+.45*vec3f(sin(t*.9+a.x*60.),sin(t*.6+a.y*50.),cos(t*.8+a.z*70.));p=g.cam.xyz+(fract((p-g.cam.xyz)/B+.5)-.5)*B;let d=length(p-g.cam.xyz);let sz=(.008+.024*a.w*a.w*a.w)*(1.+st*.45);o.cp=g.vp*vec4f(p+(g.right.xyz*(q.x*(1.+st*2.8))+g.up.xyz*q.y)*max(sz,d*.0009),1.);o.uv=q;o.wp=p;o.pr=vec4f(ss(B*.5,B*.3,d)*ss(.8,3.,d)*min(1.,sz/(d*.0009))*(.6+.4*sin(t*(1.4+a.w*2.4)+a.x*100.))*(.18+st*.42),sh1(p),a.w,d);return o;}@fragment fn fsS(i:VO)->@location(0)vec4f{let m=ss(1.,.2,length(i.uv));let c=(sunE(i.wp)*i.pr.y*.5+g.fc.rgb*.35)*mix(vec3f(1.,.84,.58),vec3f(.72,.82,1.),g.fx.z);return vec4f(min(max(c*m*m*i.pr.x*exp(-g.fc.w*i.pr.w),vec3f(0.)),vec3f(4.)),0.);}", $r = J0 + Nt + `@group(0)@binding(0)var<uniform>g:G;@group(0)@binding(1)var sR:sampler;@group(0)@binding(2)var sS:sampler_comparison;@group(0)@binding(3)var tSh:texture_depth_2d;@group(0)@binding(4)var tW:texture_2d<f32>;@group(0)@binding(5)var tDp:texture_depth${rt > 1 ? "_multisampled" : ""}_2d;@group(0)@binding(6)var tV:texture_3d<f32>;@group(0)@binding(7)var sC:sampler;@fragment fn fs(@builtin(position)fc:vec4f)->@location(0)vec4f{let dp=textureLoad(tDp,vec2i(fc.xy)*2,0);let uv=fc.xy*2.*g.res.zw;let nd=vec2f(uv.x*2.-1.,1.-uv.y*2.);let rv=g.fwd.xyz+g.right.xyz*(nd.x*g.right.w)+g.up.xyz*(nd.y*g.up.w);let rl=length(rv);let rd=rv/rl;let zl=g.fwd.w/max(dp,1e-6);let tm=min(zl*rl,200.);let dt=tm/${Qn}.;let j=ign(fc.xy);var acc=0.;for(var n=0;n<${Qn};n++){let t=(f32(n)+j)*dt;let p=g.cam.xyz+rd*t;let s=g.sm*vec4f(p,1.);let vis=textureSampleCompareLevel(tSh,sS,vec2f(s.x*.5+.5,.5-s.y*.5),s.z-.0012);let sw=textureSampleLevel(tW,sR,p.xz*.011-vec2f(g.mis.w*.12,g.mis.w*.05),1.5).r;let o=textureSampleLevel(tV,sC,(p-vec3f(-294.4,-52.,-294.4))/vec3f(588.8,92.,588.8),0.).r;let ms=sat(1.-(o-.5)*3.);acc+=exp(-g.fc.w*t)*vis*exp(-max(p.y+24.,0.)*.045)*(.65+.55*sw)*(1.+.65*ms*ms);}let mu=max(dot(rd,g.sun.xyz),0.);return vec4f(min((g.sc.rgb*.5+g.fc.rgb*.45)*acc*dt*g.fc.w*(.12+.85*pow(mu,4.)+1.2*pow(mu,16.))*g.mis.y*.72,vec3f(4.)),zl);}`, Zr = Nt + "@group(0)@binding(0)var tR:texture_2d<f32>;@fragment fn fs(@builtin(position)fc:vec4f)->@location(0)vec4f{let p=vec2i(fc.xy);let mx=vec2i(textureDimensions(tR))-vec2i(1);let c=textureLoad(tR,p,0);var acc=vec3f(0.);var ws=0.;for(var y=-1;y<=1;y++){for(var x=-1;x<=1;x++){let r=textureLoad(tR,clamp(p+vec2i(x,y),vec2i(0),mx),0);let w=1./(.03+abs(r.a-c.a)/c.a);acc+=r.rgb*w;ws+=w;}}return vec4f(acc/ws,c.a);}", Qr = J0 + Nt + `@group(0)@binding(0)var<uniform>g:G;@group(0)@binding(1)var sC:sampler;@group(0)@binding(2)var tS:texture_2d<f32>;@group(0)@binding(3)var tR:texture_2d<f32>;@group(0)@binding(4)var tB:texture_2d<f32>;@group(0)@binding(5)var tDp:texture_depth${rt > 1 ? "_multisampled" : ""}_2d;fn sat3(x:vec3f)->vec3f{return clamp(x,vec3f(0.),vec3f(1.));}fn tmap(x:vec3f)->vec3f{return sat3((x*(2.51*x+.03))/(x*(2.43*x+.59)+.14));}@fragment fn fs(@builtin(position)fc:vec4f)->@location(0)vec4f{let px=vec2i(fc.xy);let uv=fc.xy*g.res.zw;let zf=g.fwd.w/max(textureLoad(tDp,px,0),1e-6);let h=fc.xy*.5-.5;let b=floor(h);let f=h-b;let bi=vec2i(b);let mx=vec2i(textureDimensions(tR))-vec2i(1);var acc=vec3f(0.);var ws=0.;for(var k=0;k<4;k++){let o=vec2i(k&1,k>>1);let r=textureLoad(tR,clamp(bi+o,vec2i(0),mx),0);let w=(mix(1.-f.x,f.x,f32(o.x))*mix(1.-f.y,f.y,f32(o.y))+.02)/(.02+abs(r.a-zf)/zf);acc+=r.rgb*w;ws+=w;}var spx=px;if(g.fx.x>.01&&zf>18.){let nd=vec2f(uv.x*2.-1.,1.-uv.y*2.);let rd=normalize(g.fwd.xyz+g.right.xyz*(nd.x*g.right.w)+g.up.xyz*(nd.y*g.up.w));let ms=g.fx.x*ss(18.,72.,zf)*ss(.18,-.06,rd.y);let cand=clamp(px+vec2i(round(vec2f(sin(uv.y*125.-g.cam.w*7.2+uv.x*26.)*cos(uv.x*42.+g.cam.w*2.8)*2.1,cos(uv.y*92.-g.cam.w*6.1-uv.x*19.)*1.4)*ms)),vec2i(0),vec2i(g.res.xy)-vec2i(1));if(g.fwd.w/max(textureLoad(tDp,cand,0),1e-6)>14.){spx=cand;}}var c=textureLoad(tS,spx,0).rgb+acc/ws;let bl=textureSampleLevel(tB,sC,uv,0.).rgb;c=(mix(c,bl,.05)+bl*.028)*g.mis.x;let q=uv-.5;c=tmap(c*(1.-dot(q,q)*.42));let l0=dot(c,vec3f(.2126,.7152,.0722));let l=mix(l0,l0*l0*(3.-2.*l0),.48);c=pow(max(mix(vec3f(l),c*l/max(l0,1e-4),1.1),vec3f(0.)),vec3f(1./2.2));return vec4f(c+(ign(fc.xy)+ign(fc.xy+37.)-1.)/255.,1.);}`;
+      const ns = [[-62, -54, -52, -12, 13, 8, 3.5, 2.5], [-158, -116, -146, -54, 15, 12, 4.5, 3], [-42, -138, -32, -92, 14, 10, 3.8, 3], [-168, 18, -158, 64, 15, 18, 4.5, 3], [112, 138, 128, 176, 15, 11, 4.5, 3], [178, -132, 192, -58, 20, 22, 6, 3], [16, -162, 58, -152, 17, 15, 4.5, 3], [124, 28, 136, 78, 15, 12, 4, 2.5]], ss = [[-18, -25, -12, .45, 20, 3.6, 1.15], [-96, -21, -86, 1.48, 20, 3.5, 1.25], [-12, -23, 146, 1.15, 21, 3.5, 1.2]], os = [[-32, -56, 28, 44, 50, 18], [-114, -142, -78, -14, 44, 18], [-148, -12, -96, 42, 46, 18], [22, -150, 175, -12, 72, 22], [-136, 56, 8, 162, 76, 20], [-124, 24, 84, 146, 56, 22]], oasisW = (x, z) => je(66, 24, K(x - OX, z - OZ)), citW = (x, z) => je(78, 56, K(x - CX, z - CZ));
+      function Jr() { const t = []; for (const e of ns) t.push(...e); for (const e of ss) t.push(...e, 0); for (const e of os) t.push(...e, 0, 0); return new Float32Array(t) }
+      function eo(t) { const e = Jn(t, J, se, $e), c = e.nv, r = e.pos, o = es(t, J, se, $e), l = new ArrayBuffer(c * 16), s = new Float32Array(l), n = new Int8Array(l), u = new Float32Array(c * 3), f = new Float32Array(c * 3); for (let i = 0; i < c; i++) { const S = r[i * 3], v = r[i * 3 + 1], B = r[i * 3 + 2], q = .8; let O = o(S - q, v, B) - o(S + q, v, B), C = o(S, v - q, B) - o(S, v + q, B), z = o(S, v, B - q) - o(S, v, B + q); const k = K(O, C, z) || 1; O /= k, C /= k, z /= k; const M = it + S * Re, U = gt + v * Re, Q = et + B * Re; u[i * 3] = s[i * 4] = M, u[i * 3 + 1] = s[i * 4 + 1] = U, u[i * 3 + 2] = s[i * 4 + 2] = Q, f[i * 3] = O, f[i * 3 + 1] = C, f[i * 3 + 2] = z, n[i * 16 + 12] = we(O * 127), n[i * 16 + 13] = we(C * 127), n[i * 16 + 14] = we(z * 127), n[i * 16 + 15] = 127 } const m = e.ni / 6, x = new Uint8Array(m), h = new Uint32Array(ie * ie + 1), A = new Float32Array(ie * ie).fill(1e9), E = new Float32Array(ie * ie).fill(-1e9); for (let i = 0; i < m; i++) { const S = e.idx[i * 6] * 3, v = he(Ae((u[S] - it) / xt), 0, ie - 1) + ie * he(Ae((u[S + 2] - et) / xt), 0, ie - 1); x[i] = v, h[v + 1]++; for (let B = 0; B < 6; B++) { const q = u[e.idx[i * 6 + B] * 3 + 1]; q < A[v] && (A[v] = q), q > E[v] && (E[v] = q) } } for (let i = 0; i < ie * ie; i++)h[i + 1] += h[i]; const N = new Uint32Array(e.ni), L = h.slice(); for (let i = 0; i < m; i++) { const S = L[x[i]]++ * 6; for (let v = 0; v < 6; v++)N[S + v] = e.idx[i * 6 + v] } return { vb: l, ib: N, nv: c, wp: u, wn: f, smp: o, start: h, lo: A, hi: E } }
+      function to(t, e, c) {
+        const o = (a, p, g) => a + J * (p + se * g), n = ie * ie, u = (a, p) => he(Ae((a - it) / xt), 0, ie - 1) + ie * he(Ae((p - et) / xt), 0, ie - 1), f = Array.from({ length: n }, () => []), m = Array.from({ length: n }, () => []); let x = 0; const h = (a, p, g, d, w, P, V, T, D, W, H, Z, te) => { (W === 1 || W === 2 || W === 8 || W === 9 || !(x++ % Y0)) && a[u(p, d)].push(p, g, d, w, P, V, W === 1 || W >= 8 ? T : T * (1 + me * .4), D, W, H, Z, te) }, S = [], A = (...a) => { x++ % Y0 || S.push(...a) }, E = [], N = Array.from({ length: 6 }, () => Array.from({ length: n }, () => [])), L = (a, p, g, d, w, P, V, T, D = 1, W = 0) => { (a > 3 && a < 10 ? N[a - 4][u(p, d)] : E[a] ||= []).push(p, g, d, w, P[0], P[1], P[2], P[3], V, T, D, W) }, i = Array.from({ length: Q0 }, () => Array.from({ length: n }, () => [])), B = [], q = new Float32Array(J / 2 * (se / 2) * ($e / 2)), r0 = (a, p) => { const g = he(we((a - it) / Re), 1, J - 2), d = he(we((p - et) / Re), 1, $e - 2); for (let P = se - 2; P >= 0; P--) { const V = t[o(g, P, d)], T = t[o(g, P + 1, d)]; if (T <= 0 && V > 0) return gt + (P + V / (V - T)) * Re } return -28 }, rL = (a, p) => { const g = he(we((a - it) / Re), 1, J - 2), d = he(we((p - et) / Re), 1, $e - 2); for (let P = 1; P < se - 2; P++)if (t[o(g, P, d)] > 0 && t[o(g, P + 1, d)] <= 0) return gt + (P + t[o(g, P, d)] / (t[o(g, P, d)] - t[o(g, P + 1, d)])) * Re; return r0(a, p) }, M = () => (y() * e.nv | 0) * 3, Q = (a, p, g, d) => { for (const w of c) if (K(a - w[0], g - w[2]) < d) return !0; return !1 }, inW = (a, p, g) => g < OY + .25 && K(a - OX, p - OZ) < 36, cy = -12, P = (sl, lx, lz, sc, ly = 0, mt2 = 2, sd = y(), bb = 0, dy = 0) => { const [wx, wz] = pal(lx, lz); L(sl, wx, cy + dy, wz, sc, ot(0, 1, 0, CYAW + ly), mt2, sd, 1, bb) };
+        P(10, 0, -22, 1.38, 0, 2, .12); const [kx, kz] = pal(0, -22); h(f, kx, cy + 62, kz, 6, CYAW + .2, 1.65, 1.4, 14, 8, .42, .4, .42); P(17, -25, -22, 1.24, 0, 2, .24); P(17, 25, -22, 1.24, 0, 2, .36); P(18, 0, 14, 1, 0, 2, .2); const [fx, fz] = pal(0, 14); L(16, fx, cy + 7.8, fz, .48, ot(0, 1, 0, 0), 6, .88, 1, .3); for (let k = 0; k < 16; k++)A(fx + b(-2.6, 2.6), cy + b(3.2, 7.2), fz + b(-2.6, 2.6), 0, y(), .92, b(.03, .075), 0);
+        for (const [lx, lz, sc] of [[-36, -6, 1.38], [36, -6, 1.38], [-36, -38, 1.46], [36, -38, 1.46], [-20, -34, 1.52], [20, -34, 1.52]]) { P(11, lx, lz, sc, 0, 2); const [tx, tz] = pal(lx, lz); L(16, tx, cy + 22 * sc, tz, .52 * sc, ot(0, 1, 0, 0), 6, .4, 1, 0); h(f, tx, cy + 34 * sc, tz, 4 * sc, CYAW, 1.62, 1 * sc, 12, 8, y(), y(), .44) }
+        P(13, 0, 44, 1.42, 0, 2, .18); for (const sg of [-1, 1]) { const [lx, lz] = pal(sg * 8.2, 44); L(16, lx, cy + 15, lz, .52, ot(0, 1, 0, 0), 6, .35, 1, 0); h(f, lx, cy + 30, lz, 4.5, CYAW, 1.62, 1.1, 10, 8, sg > 0 ? .1 : .45, y(), .44) }
+        for (const [lx, lz, sc, ly] of [[-24, 44, 1.55, 0], [24, 44, 1.55, 0], [-24, -44, 1.55, 0], [24, -44, 1.55, 0], [0, -44, 1.55, 0], [-46, 20, 1.65, pt / 2], [-46, -14, 1.65, pt / 2], [-46, -36, 1.2, pt / 2], [46, 20, 1.65, pt / 2], [46, -14, 1.65, pt / 2], [46, -36, 1.2, pt / 2]]) P(12, lx, lz, sc, ly, 2);
+        for (const [lx, lz] of [[-46, 44], [46, 44], [-46, -44], [46, -44], [-46, 2], [46, 2]]) { P(14, lx, lz, 1.48, 0, 2, y(), 0, 1.5); const [bx, bz] = pal(lx, lz); h(f, bx, cy + 23, bz, 4, CYAW, 1.62, .95, 10, 8, y(), y(), .44) }
+        for (let k = 0; k < 8; k++) { const a = k / 8 * fe; L(16, kx + oe(a) * 16, cy + 44 + le(a * 2) * 3.2, kz + le(a) * 16, .75, Vt(ot(0, 1, 0, a), ot(1, 0, 0, .3)), 6, .45, 1, 1.1) }
+        for (const sx of [-1, 1]) for (const lz of [-3, 5, 14, 23, 31, 54, 66]) { const lx = lz > 46 ? sx * 11.5 : sx * 5.4, [ox, oz] = pal(lx, lz), oy = lz > 46 ? r0(ox, oz) : cy + 1.8; L(15, ox, oy - .4, oz, lz > 46 ? 1.2 : .58, ot(0, 1, 0, CYAW), 2, y(), 1, 0); L(16, ox, oy + (lz > 46 ? 13.4 : 6.8), oz, .34, ot(0, 1, 0, 0), 6, .45, 1, .22) }
+        for (const sx of [-1, 1]) for (const lz of [-5, 33]) { const [ox, oz] = pal(sx * 21.8, lz); L(16, ox, cy + 3.8, oz, .42, ot(0, 1, 0, 0), 6, .42, 1, 0) }
+        const opy = OY + .45; L(14, OX + 22, opy, OZ - 18, 1.35, ot(0, 1, 0, 2.4), 2, .36, 1, 0); L(16, OX + 22, opy + 7.2, OZ - 18, .62, ot(0, 1, 0, 0), 6, .88, 1, .25); L(14, -70, rL(-70, 106) - .2, 106, .92, ot(0, 1, 0, .6), 2, .62, 1, 0);
+        for (const [cx, cz, cy2, sc] of [[-96, 86, -22, 1.6], [-108, 96, -19, 1.9], [-112, 110, -20, 1.8], [-98, 122, -23, 1.5], [-84, 126, -25, 1.4], [-104, 104, -8, 1.5], [-88, 92, -9, 1.4]]) L(16, cx, cy2, cz, sc, Vt(ot(0, 1, 0, y() * fe), ot(1, 0, 0, b(-.4, .4))), 6, .9, 1, 0);
+        L(15, -109, r0(-109, 5) - .3, 5, 1.25, Vt(ot(0, 1, 0, .6), ot(0, 0, 1, .06)), 2, .5, 1, 0); L(16, -113, r0(-113, 9) + .55, 9, .54, ot(0, 1, 0, 0), 6, .4, 1, 0);
+        for (const ob of [[-46, 120, 1.25, .08, -.04], [-96, -68, 1.3, -.08, .04], [18, 98, 1.32, .09, -.04]]) L(15, ob[0], r0(ob[0], ob[1]) - .4, ob[1], ob[2], Vt(ot(0, 1, 0, y() * fe), Vt(ot(1, 0, 0, ob[3]), ot(0, 0, 1, ob[4]))), 2, y(), 1, 0);
+        for (const wf of [[-106, 94, 18.5, 2.2], [-110, 106, 21, 2.6], [-102, 118, 18, 2.1]]) { for (let k = 0; k < 6; k++)h(f, wf[0], OY + wf[2] * .9, wf[1] + (k - 2.5) * .95, wf[2], 0, 2.64, wf[3], 0, 9, k / 6, y(), .44); for (let k = 0; k < 22; k++)A(wf[0] + 2.5 + b(-3.5, 3.5), OY + b(.3, 4.2), wf[1] + b(-4, 4), 0, y(), .92, b(.05, .12), 0) }
+        ke(1); const addP = (px, pz, sc) => { const py = rL(px, pz); if (py < OY - .2 || py > -14) return; const yaw = y() * fe, tl = b(.05, .22); L(9, px, py - .4, pz, sc, Vt(ot(0, 1, 0, yaw), ot(0, 0, 1, tl)), 3, y(), 1, 0); const lx = 1.35 * sc, ly = 8.4 * sc, cT = oe(tl), sT = le(tl), rx = lx * cT - ly * sT, ry = lx * sT + ly * cT, cx = px + rx * oe(yaw), cy2 = py - .4 + ry, cz = pz - rx * le(yaw); for (let j = 0; j < 24; j++) { const fa = j / 24 * fe + b(-.1, .1); h(f, cx + oe(fa) * .18, cy2 + b(-.15, .25), cz + le(fa) * .18, b(3.2, 4.9) * sc, fa, j % 2 ? b(.5, .88) : b(.94, 1.34), b(.45, .66) * sc, ly * .65, 2, y(), y(), b(.68, .96)) } const gx = we((cx - it) / Re / 2), gz = we((cz - et) / Re / 2), gy2 = Ae((cy2 - gt) / Re / 2); gx > 0 && gx < J / 2 - 1 && gz > 0 && gz < $e / 2 - 1 && gy2 >= 0 && gy2 < se / 2 && (q[gx + J / 2 * (gy2 + se / 2 * gz)] += .3) };
+        for (let k = 0; k < 58; k++) { const a = k / 58 * fe + b(-.06, .06), rd = b(34, 52), px = OX + oe(a) * rd, pz = OZ + le(a) * rd; K(px - (OX + 22), pz - (OZ - 18)) < 10 || px < -100 || addP(px, pz, b(1.1, 1.85)) }
+        for (let k = 0; k < 10; k++) { const a = k / 10 * fe + b(-.1, .1), rd = b(2.2, 7.2); addP(-70 + oe(a) * rd, 106 + le(a) * rd, b(1, 1.6)) }
+        ke(2); const addR = (px, pz, cnt, ty, l0, l1) => { const py = rL(px, pz); if (py < OY - .2) return; for (let k = 0; k < cnt; k++) { const a = y() * fe, rd = y() * 1.3, ln = b(l0, l1); h(f, px + oe(a) * rd, py - .14, pz + le(a) * rd, ln, a, b(.08, .58), b(.12, .24), ln * .5, ty, y(), y(), b(.35, .78)) } };
+        for (let k = 0; k < 280; k++) { const a = y() * fe, rd = b(33, 54), px = OX + oe(a) * rd, pz = OZ + le(a) * rd; if (K(px - (OX + 22), pz - (OZ - 18)) < 8 || px < -102) continue; addR(px, pz, 8 + (y() * 9 | 0), y() < .5 ? 0 : y() < .78 ? 7 : 4, 1.6, 4.2); if (y() < .58) { const py = rL(px, pz); if (py > OY - .1) for (let j = 0; j < 10; j++)h(m, px + b(-.9, .9), py - .05, pz + b(-.9, .9), b(.35, .85), y() * fe, b(.15, .9), b(.12, .22), 0, 5, y(), y(), b(.3, .72)) } y() < .45 && A(px, rL(px, pz) + b(.6, 4.2), pz, 0, y(), y(), b(.032, .075), 0) }
+        for (let k = 0; k < 110; k++) { const a = y() * fe, rd = y() < .35 ? b(9, 16) : b(22, 33), px = OX + oe(a) * rd, pz = OZ + le(a) * rd; if (rL(px, pz) > OY - .25) continue; for (let j = 0; j < 5; j++)h(m, px + b(-.5, .5), OY + .04, pz + b(-.5, .5), b(.32, .62), y() * fe, b(.75, 1.35), b(.18, .32), 0, j < 3 ? 7 : 5, y(), y(), b(.2, .5)); y() < .4 && A(px, OY + b(.4, 2.8), pz, 0, y(), .85, b(.03, .07), 0) }
+        for (const sp of [[12, 26], [22, 30], [4, 18], [-18, -6], [54, 108], [68, 108], [46, 100], [-92, -24], [-98, -42], [-112, 12], [-118, 8]]) addR(sp[0] + b(-3, 3), sp[1] + b(-3, 3), 10 + (y() * 8 | 0), y() < .5 ? 0 : 4, 1.4, 3.4);
+        ke(3); for (let a = 0; a < 22e3; a++) { const p = M(), gx = e.wp[p], gy = e.wp[p + 1], gz = e.wp[p + 2], ny = e.wn[p + 1]; if (K(gx, gz) > 248 || ny < .65 || inW(gx, gz, gy) || citW(gx, gz) > .3 || Q(gx, gy, gz, 8)) continue; const ow = oasisW(gx, gz), nv = mt(gx * .03, 3, gz * .03, 2); if (ow > .2 && y() < .52) addR(gx, gz, 6 + (y() * 7 | 0), y() < .45 ? 0 : 7, 1, 2.8); else if (nv > .56 && y() < .08) { const ty = y() < .45 ? 3 : y() < .75 ? 4 : 7; for (let k = 0; k < 6 + (y() * 7 | 0); k++)h(f, gx + b(-.9, .9), gy - .08, gz + b(-.9, .9), b(.8, 2.2), y() * fe, b(.18, .95), b(.1, .22), .5, ty, y(), y(), b(.28, .75)) } }
+        ke(4); for (let a = 0; a < 14e4; a++) { const p = M(); if (e.wn[p + 1] < .74) continue; const gx = e.wp[p] + b(-.6, .6), gy = e.wp[p + 1], gz = e.wp[p + 2] + b(-.6, .6); if (K(gx, gz) > 245 || inW(gx, gz, gy) || citW(gx, gz) > .35 || Q(gx, gy, gz, 5)) continue; const ow = oasisW(gx, gz), dn = mt(gx * .048, 5, gz * .048, 2); if (ow > .24 && y() < .72) for (let k = 0; k < 3; k++)h(m, gx + b(-.25, .25), gy - .04, gz + b(-.25, .25), b(.28, .75), y() * fe, b(.1, .85), b(.08, .15), 0, y() < .42 ? 5 : 7, y(), y(), b(.3, .75)); else if (dn > .58 && y() < .11) for (let k = 0; k < 3; k++)h(m, gx + b(-.25, .25), gy - .04, gz + b(-.25, .25), b(.3, .8), y() * fe, b(.15, .85), b(.07, .12), 0, y() < .6 ? 3 : 4, y(), y(), b(.3, .8)) }
+        ke(5); for (let a = 0; a < 2e4; a++) { const p = M(), gx = e.wp[p], gy = e.wp[p + 1], gz = e.wp[p + 2], ny = e.wn[p + 1]; if (K(gx, gz) > 238 || ny > -.4 || gy < -28) continue; const inC = oasisW(gx, gz) > .25; if (y() > (inC ? .62 : .16)) continue; for (let k = 0; k < (inC ? 10 : 6); k++)h(f, gx + b(-1.1, 1.1), gy + .2, gz + b(-1.1, 1.1), inC ? b(2.2, 6.5) : b(1.1, 3.2), y() * fe, pt - b(0, .32), inC ? b(.12, .26) : b(.09, .18), 0, 6, y(), y(), b(.25, .55)) }
+        ke(6); for (let a = 0; a < 8500; a++) { const p = M(), gx = e.wp[p], gy = e.wp[p + 1], gz = e.wp[p + 2], ny = e.wn[p + 1]; if (K(gx, gz) > 240 || ny < .78 || inW(gx, gz, gy) || citW(gx, gz) > .3 || Q(gx, gy, gz, 9)) continue; const ow = oasisW(gx, gz), pr = mt(gx * .024, 8, gz * .024, 2); if (y() > (ow > .18 ? .16 : pr > .55 ? .055 : .012)) continue; const r2 = y(); if (r2 < .28) { const sc = b(.65, 1.45); L(4, gx, gy - .1 * sc, gz, sc, Vt(Z0(e.wn[p], ny, e.wn[p + 2]), ot(0, 1, 0, y() * fe)), 4, y(), 1, 0) } else if (r2 < .52) { const sc = b(1, 2); L(5, gx, gy - .18 * sc, gz, sc, ot(0, 1, 0, y() * fe), 4, y(), 1, 0) } else if (r2 < .66 && ow < .15) { const sc = b(1.5, 3.2); L(6, gx, gy - .3 * sc, gz, sc, ot(0, 1, 0, y() * fe), 1, y(), 1, 0) } else { const sc = b(.9, 2.2); L(y() < .55 ? 7 : 8, gx, gy - .12 * sc, gz, sc, ot(0, 1, 0, y() * fe), 5, y(), 1, 0) } }
+        ke(8); for (let a = 0; a < 1400; a++) { const p = M(), gx = e.wp[p], gy = e.wp[p + 1], gz = e.wp[p + 2]; if (e.wn[p + 1] < .65 || K(gx, gz) > 250 || inW(gx, gz, gy) || citW(gx, gz) > .35 || Q(gx, gy, gz, 10)) continue; const sc = b(.45, 2.2) * (y() < .12 ? 2.1 : 1); L(y() * 4 | 0, gx, gy + sc * .12, gz, sc, Tt(), 1, y(), 1, 0) }
+        ke(9); for (let a = 0; a < 3e4; a++) { const p = M(), gx = e.wp[p], gy = e.wp[p + 1], gz = e.wp[p + 2], ny = e.wn[p + 1]; if (K(gx, gz) > 252 || ny > .82 && y() < .84 || inW(gx, gz, gy) || citW(gx, gz) > .3 || Q(gx, gy, gz, 7)) continue; const sc = (.5 + 2.8 * ye(y(), 2.7)) * (ny > .75 ? .55 : 1), T = Tt(); i[(sc > 1.7 ? 3 : 0) + (y() * 3 | 0)][u(gx, gz)].push(gx - e.wn[p] * sc * .35, gy - ny * sc * .35, gz - e.wn[p + 2] * sc * .35, sc, T[0], T[1], T[2], T[3], 1, y(), sc > 1.7 ? 0 : 135, 0) }
+        ke(10); for (let a = 0; a < 64e3; a++) { const p = M(), gx = e.wp[p] + b(-.6, .6), gy = e.wp[p + 1], gz = e.wp[p + 2] + b(-.6, .6); if (e.wn[p + 1] < .78 || K(gx, gz) > 245 || inW(gx, gz, gy) || citW(gx, gz) > .35 || Q(gx, gy, gz, 3) || mt(gx * .055, 2, gz * .055, 2) < .52) continue; const sc = .09 + .38 * ye(y(), 2.2), T = Tt(); x++ % Y0 || i[6][u(gx, gz)].push(gx, gy - sc * .25, gz, sc, T[0], T[1], T[2], T[3], 1, y(), 65, 0) }
+        ke(11); for (let a = 0; a < 1500; a++) { const a2 = y() * fe, rd = Ye(y()) * 215, gx = oe(a2) * rd, gz = le(a2) * rd; A(gx, r0(gx, gz) + b(.4, 4.2), gz, 0, y(), y(), b(.022, .055), 0) }
+        ke(12); for (const [vx, vz, cnt, sz0, sz1] of [[-24, -22, 340, 4.8, 11.5], [-64, -12, 120, 3.8, 8.5]]) { const vy = r0(vx, vz); for (let k = 0; k < cnt; k++)B.push(vx, vy, vz, b(sz0, sz1), y(), b(.95, 1.65), y(), 0) }
+        const tbY = r0(-24, -22); for (let k = 0; k < 70; k++)B.push(-24, tbY, -22, b(3.5, 6.5), y(), b(.9, 1.5), y(), 1);
+        const Cr = [-14, r0(-14, 82) + 4, 82, 42, .15, .03, 2.6, 2.1, -26, r0(-26, -10) + 4, -10, 38, .52, .034, 2.4, .55, -68, r0(-68, -74) + 4, -74, 40, .82, .028, 2.5, 1.25];
+        for (const [wx, wz] of [[-14, 82], [-26, -10], [-68, -74]]) { const wy = r0(wx, wz); for (let k = 0; k < 24; k++)B.push(wx + b(-14, 14), wy, wz + b(-14, 14), b(5.5, 12), y(), b(.6, 1.2), y(), 2) }
+        ke(13); const Fr = []; for (const tw of [[4, 16, 70], [-12, 28, 66], [36, 92, 76], [4, 82, 70], [-84, -46, 74], [-94, -74, 68], [40, -20, 66], [24, 14, 70], [-88, 28, 68], [18, 40, 72], [-44, -18, 74], [6, -70, 72], [28, 68, 68], [-22, -66, 70], [54, 40, 68]]) for (let k = 0; k < 2; k++) { const gx = tw[0] + b(-9, 9), gz = tw[1] + b(-9, 9); Fr.push(gx, r0(gx, gz), gz, tw[2], y(), b(.055, .1), b(.62, 1.15), .55 + b(-.25, .25)) }
+        const jn = new Float32Array(4500 * 4); for (let a = 0; a < jn.length; a++)jn[a] = y();
+        const Xn = (a, p = 1, g = 1) => { let d = 0; const w = new Uint32Array(n + 1); for (let Z = 0; Z < n; Z++)w[Z] = d, d += Math.ceil(a[Z].length / 12 / p); w[n] = d; const P = new ArrayBuffer(d * 36), V = new Float32Array(P), T = new Uint8Array(P), D = new Float32Array(n).fill(1e9), W = new Float32Array(n).fill(-1e9); let H = 0; for (let Z = 0; Z < n; Z++) { const te = a[Z]; for (let ve = 0; ve < te.length; ve += 12 * p, H++) { for (let Ge = 0; Ge < 8; Ge++)V[H * 9 + Ge] = te[ve + Ge]; V[H * 9 + 6] *= g, T[H * 36 + 32] = te[ve + 8], T[H * 36 + 33] = te[ve + 9] * 255, T[H * 36 + 34] = te[ve + 10] * 255, T[H * 36 + 35] = te[ve + 11] * 255; const de = te[ve + 1], Je = te[ve + 3]; de - Je < D[Z] && (D[Z] = de - Je), de + Je > W[Z] && (W[Z] = de + Je) } } return { buf: P, n: d, start: w, lo: D, hi: W } }, Ke = J / 2, Hn = se / 2, Lt = $e / 2, Kn = new Uint8Array(Ke * Hn * Lt * 2);
+        let o0 = new Float32Array(Ke * Lt).fill(1), Yn = new Float32Array(Ke * Lt), X0 = new Float32Array(Ke * Lt);
+        for (let a = Hn - 1; a >= 0; a--) { for (let g = 0; g < Lt; g++)for (let d = 0; d < Ke; d++) { const w = d + Ke * g; X0[w] = (o0[d > 0 ? w - 1 : w] + 2 * o0[w] + o0[d < Ke - 1 ? w + 1 : w]) * .25 } for (let g = 0; g < Lt; g++)for (let d = 0; d < Ke; d++) { const w = d + Ke * g, P = (X0[g > 0 ? w - Ke : w] + 2 * X0[w] + X0[g < Lt - 1 ? w + Ke : w]) * .25, V = o(d * 2, a * 2, g * 2), T = (t[V] + t[V + 1] + t[V + J] + t[V + J + 1] + t[V + J * se] + t[V + J * se + 1] + t[V + J * se + J] + t[V + J * se + J + 1]) * .125, D = d + Ke * (a + Hn * g), W = P * he(.5 - T / 1.5, 0, 1) * (1 - Ee(q[D], .5)); Yn[w] = W, Kn[D * 2] = he(.5 - T / 12, 0, 1) * 255, Kn[D * 2 + 1] = Ee(1, P) * 255 } const p = o0; o0 = Yn, Yn = p }
+        const H0 = new Uint8Array(512 * 512 * 4); for (let a = 0; a < 512; a++)for (let p = 0; p < 512; p++) { const g = (p + .5) / 512 * 588.8 - 294.4, d = (a + .5) / 512 * 588.8 - 294.4, w = (p + 512 * a) * 4; H0[w] = oasisW(g, d) * 255, H0[w + 1] = je(.32, .68, mt(g * .024, 3, d * .024, 3)) * 255, H0[w + 2] = citW(g, d) * 255, H0[w + 3] = 255 }
+        const K0 = { data: [], ranges: [] }; let Or = 0; for (let a = 0; a < 19; a++) { const p = E[a] || []; K0.ranges.push([Or, p.length / 12]), Or += p.length / 12; for (let g = 0; g < p.length; g++)K0.data.push(p[g]) }
+        const Mr = a => { let p = 0; const g = new Uint32Array(n + 1); for (let T = 0; T < n; T++)g[T] = p, p += a[T].length / 12; g[n] = p; const d = new Float32Array(p * 12), w = new Float32Array(n).fill(1e9), P = new Float32Array(n).fill(-1e9); let V = 0; for (let T = 0; T < n; T++) { const D = a[T]; for (let W = 0; W < D.length; W += 12) { for (let H = 0; H < 12; H++)d[V++] = D[W + H]; w[T] = Ee(w[T], D[W + 1] - 5), P[T] = ne(P[T], D[W + 1] + 14) } } return { data: d, n: p, start: g, lo: w, hi: P } };
+        return { gy: r0, glints: new Float32Array(S), chunks: i.map(Mr), props: N.map(Mr), big: Xn(f), bigF: Xn(f, 2, 1.5), small: Xn(m), solids: { data: new Float32Array(K0.data), ranges: K0.ranges }, bubbles: new Float32Array(B), volD: Kn, gm: H0, fish: new Float32Array(Fr), mantas: new Float32Array(Cr), snow: jn }
+      }
+      function Ne(t, e = 2, c = e > 2) { me > 1 && e > 1 && e--, ke(100 + t); const r = []; for (let o = 0; o < 4; o++) { const l = Tt(); r.push([l[0], l[1], l[2], b(.78, .96)]); const s = K(l[0], l[1], l[2]) || 1; r[o][0] /= s, r[o][1] /= s, r[o][2] /= s } return _r(e, (o, l, s) => { let n = 1 + (mt(o * 1.6 + t, l * 1.6, s * 1.6, 2) - .5) * .85 + (c ? (mt(o * 4 + t, l * 4, s * 4, 2) - .5) * .22 : 0), u = o * n, f = l * n * .68, m = s * n; for (const x of r) { const h = u * x[0] + f * x[1] + m * x[2] - x[3]; h > 0 && (u -= x[0] * h, f -= x[1] * h, m -= x[2] * h) } return [u, f, m] }) }
+      function tn(t, e, c, r = 0, rib = .08) { const o = new Et, l = []; for (const [s, n, u] of t) { const f = []; for (let m = 0; m < e; m++) { const x = m / e * fe, h = s * (1 + c * (mt(oe(x) * 1.5 + n * 2, n * 3, le(x) * 1.5, 2) - .5) + rib * oe(r * x)); f.push(o.v(oe(x) * h, n, le(x) * h, u)) } l.push(f) } for (let s = 0; s < l.length - 1; s++)for (let n = 0; n < e; n++) { const u = (n + 1) % e; o.quad(l[s][n], l[s + 1][n], l[s + 1][u], l[s][u]) } return o }
+      function a0(t, e = me > 1) { ke(200 + t); const c = new Et, r = s => { const n = K(...s) || 1; return s.map(u => u / n) }, o = (s, n, u, f, m) => { const x = [s]; let h = s; for (let A = 0; A < 3; A++)n = r([n[0] + b(-.35, .35), n[1] + b(.05, .35), n[2] + (t ? b(-.1, .1) : b(-.35, .35))]), h = [h[0] + n[0] * f / 3, h[1] + n[1] * f / 3, h[2] + n[2] * f / 3], x.push(h); if (m || x.push([h[0] + n[0] * u * 1.4, h[1] + n[1] * u * 1.4, h[2] + n[2] * u * 1.4]), e ? c.tube(m ? [x[0], x[3]] : [x[0], x[3], x[4]], A => (A > 1 ? u * .36 : u * (1 - .22 * A)) * 1.2, 3, !0, A => he(1 - (m + 1 - A) / 5, 0, 1)) : c.tube(x, A => A > 3 ? u * .36 : u * (1 - .22 * A / 3), t ? 5 : 6, !0, A => he(1 - (m + 1 - A / 3) / 5, 0, 1)), m > 0) { const A = 2 + (y() < .45); for (let E = 0; E < A; E++)o(h, r([n[0] + b(-.8, .8), n[1] + b(.05, .45), n[2] + (t ? b(-.12, .12) : b(-.8, .8))]), u * .76, f * .78, m - 1) } }, l = t ? 1 : 2 + (y() * 2 | 0); for (let s = 0; s < l; s++)o([b(-.08, .08), 0, b(-.08, .08)], r([b(-.4, .4), 1, t ? 0 : b(-.4, .4)]), t ? .055 : .08, t ? .55 : .48, 3); return c }
+      function saguaro() { ke(211); const t = new Et; t.tube([[0, -.3, 0], [0, .8, 0], [0, 2.2, 0], [0, 3.4, 0], [0, 3.7, 0]], i => i === 4 ? .08 : .28 + .03 * le(i), 10, !0, i => .45 + .55 * i / 4); for (const a of [[1, 1.3, 2.8], [-1, 1.8, 3.1]]) { const s = a[0]; t.tube([[0, a[1], 0], [s * .55, a[1] + .05, 0], [s * .85, a[1] + .35, 0], [s * .88, a[1] + .9, 0], [s * .86, a[2], 0]], i => i === 4 ? .07 : .21, 8, !0, i => .5 + .5 * i / 4) } return t }
+      function palmTrunk() { const t = new Et, pts = []; for (let i = 0; i <= 8; i++) { const u = i / 8; pts.push([1.35 * u * u, u * 8.4, 0]) } return t.tube(pts, i => .36 - .16 * (i / 8) + .025 * (i % 2), 9, !0, i => .4 + .6 * i / 8), t }
+      function fSpire(R, hR, hF, sg = 14, ro = .91) { return tn([[R * 1.08, 0, .97], [R * 1.02, hR * .12, ro], [R * .76, hR * .38, ro], [R * .48, hR * .65, ro], [R * .24, hR * .86, ro], [R * .1, hR, .97], [R * .18, hR + hF * .18, .97], [R * .06, hR + hF * .45, .97], [R * .12, hR + hF * .65, .97], [0, hR + hF, .97]], sg, .01, sg / 2, .025) }
+      function agDome(R, hB, hD, hS, sg = 14, da = .82) { return tn([[R * .8, 0, .64], [R * .84, hB, .97], [R * 1.08, hB + hD * .3, da], [R * .95, hB + hD * .56, da], [R * .56, hB + hD * .78, da], [R * .14, hB + hD, .97], [R * .2, hB + hD + hS * .22, .97], [R * .05, hB + hD + hS * .75, .97], [0, hB + hD + hS, .97]], sg, .01, sg / 2, .025) }
+      function sKeep() { const t = new Et; t.box(0, 1.2, 0, 23, 3.2, 19, .62); t.box(0, 6.2, 0, 18, 10.8, 14.8, .64); t.box(0, 11.6, 0, 18.6, .7, 15.4, .97); for (let x = -7; x <= 7; x += 3.5) { t.box(x, 5.2, 7.55, 1.8, 6.6, .3, .31); t.box(x + 1.75, 5.6, 7.6, .95, 10.4, 1.2, .66) } for (const s of [-1, 1]) t.box(s * 3.9, 7.6, 7.8, 2.6, 12.8, 2.2, .66); t.box(0, 13.6, 7.8, 10.4, 2.2, 2.2, .91); t.box(0, 14.9, 7.8, 10.8, .5, 2.4, .97); t.box(0, 5.2, 7.1, 5.2, 8.4, .6, .31); const iw = []; for (let i = 0; i <= 12; i++) { const u = i / 12, a = ae(pt, 0, u); iw.push([oe(a) * 3.1, 7.2 + le(a) * 4.2 + (1 - ge(u - .5) * 2) * 1.3, 7.9]) } t.sweep(iw, 1.05, 2.2, () => [0, 0, 1], !0, .66); t.box(0, 16.5, 0, 13.4, 10.2, 11.2, .64); t.box(0, 21.8, 0, 14, .65, 11.8, .97); for (let x = -4.5; x <= 4.5; x += 3)t.box(x, 16.8, 5.75, 1.4, 4.8, .3, .31); for (const sx of [-1, 1]) for (const sz of [-1, 1]) { t.add(tn([[1.2, 12, .64], [1.8, 14.2, .97], [1.65, 24, .66], [1.95, 24.8, .97]], 10, .01, 0, 0), sx * 7.6, 0, sz * 5.8); t.add(fSpire(1.9, 8.2, 3.6, 12, .91), sx * 7.6, 24.8, sz * 5.8); t.add(tn([[1.4, 21, .64], [1.3, 28.5, .66], [1.55, 29.2, .97]], 10, .01, 0, 0), sx * 5.4, 0, sz * 4.5); t.add(fSpire(1.6, 7.2, 3.2, 12, .91), sx * 5.4, 29.2, sz * 4.5) } t.add(tn([[4.4, 21.5, .64], [4, 31.5, .66], [4.8, 32.5, .97], [4.3, 33.2, .66], [4.1, 36.2, .31], [4.5, 37, .97]], 14, .01, 7, .02)); for (let k = 0; k < 8; k++) { const a = k / 8 * fe; t.box(oe(a) * 4.1, 34.8, le(a) * 4.1, .45, 3.8, .45, .66) } t.add(fSpire(4.5, 14.5, 6.2, 16, .91), 0, 37, 0); return t }
+      function fTurret() { const t = new Et; t.add(tn([[2.5, -2, .6], [2.1, 0, .64], [1.8, 12, .66], [2.5, 13, .91], [2.6, 13.7, .97], [1.65, 13.8, .64], [1.55, 20.5, .66], [2.2, 21.4, .91], [2.28, 22.1, .97], [1.4, 22.2, .31]], 12, .01, 6, .02)); for (let k = 0; k < 6; k++) { const a = k / 6 * fe; t.box(oe(a) * 1.45, 23.8, le(a) * 1.45, .34, 3.6, .34, .66) } t.add(fSpire(1.95, 9.2, 4, 14, .91), 0, 25.5, 0); return t }
+      function pWing() { const t = new Et; t.box(0, 5.2, 0, 16.4, 11.6, 6.4, .64); t.box(0, 11.1, 0, 17, .55, 7, .97); for (let x = -6.4; x <= 6.4; x += 3.2) { t.box(x, 4.8, 3.35, 1.6, 5.8, .3, .31); t.box(x + 1.6, 5.4, 3.4, .85, 11, .9, .66); t.box(x, 12.1, 3.15, .9, 1.3, .5, .66) } const sp = fSpire(1.85, 7.4, 3.2, 12, .91); for (const x of [-5.2, 0, 5.2]) t.add(sp, x, 11.4, 0); return t }
+      function pWall() { const t = new Et; t.box(0, 1.6, 0, 20, 5.2, 4.2, .58); t.box(0, 5.8, 0, 20, 7, 3.2, .64); t.box(0, 9.1, 0, 20.4, .7, 3.6, .91); t.box(0, 9.7, 0, 20.6, .45, 3.8, .97); for (let x = -8.8; x <= 8.8; x += 2.2) { t.box(x, 10.6, 1.5, .95, 1.4, .7, .66); t.box(x, 11.2, 1.5, .5, .55, .7, .66); t.box(x, 5.4, 1.7, .65, 6.4, .5, .66) } for (const x of [-6.6, 0, 6.6]) { t.add(tn([[1.6, -1, .58], [1.35, 9.8, .64], [1.6, 10.4, .97]], 10, .01, 0, 0), x, 0, 1.8); t.add(fSpire(1.4, 4.2, 1.8, 10, .91), x, 10.4, 1.8) } return t }
+      function sGate() { const t = new Et, gS = fSpire(2.4, 9.8, 4.2, 14, .91); for (const s of [-1, 1]) { t.add(tn([[3, -2, .58], [2.6, 0, .64], [2.3, 15, .66], [2.8, 15.8, .91], [2.9, 16.5, .97]], 12, .01, 6, .02), s * 6.2, 0, 0); t.add(gS, s * 6.2, 16.5, 0) } t.box(0, 12.8, 0, 9.4, 4.8, 4.2, .64); t.box(0, 15, 0, 9.8, .75, 4.6, .91); t.box(0, 15.65, 0, 10, .5, 4.8, .97); t.box(0, 13, 2.2, 2.2, 2.2, .3, .31); const arch = []; for (let i = 0; i <= 14; i++) { const u = i / 14, a = ae(pt, 0, u); arch.push([oe(a) * 4.4, 5.6 + le(a) * 4.9 + (1 - ge(u - .5) * 2) * 1.2, 0]) } t.sweep(arch, 1.4, 4.3, () => [0, 0, 1], !0, .66); for (let x = -3.4; x <= 3.4; x += 1.7)t.box(x, 16.5, 1.8, .85, 1.2, .6, .66); for (let s = 0; s < 5; s++)t.box(0, -1.5 + s * .45, 4.2 - s * .75, 10.2, .5, 1.55, .62); return t }
+      function pCourt() { const t = new Et; t.box(0, 1.25, 0, 8.6, 1.7, 54, .64); t.box(0, 2.15, 0, 4.2, .14, 52, .46); for (const s of [-1, 1]) { t.box(s * 4.1, 2.35, 0, .55, .55, 53, .97); t.box(s * 2.45, 2.14, 0, .4, .08, 52, .91) } t.add(tn([[5.4, 1.3, .64], [5.2, 2.4, .91], [4.8, 2.55, .97], [3.6, 2.65, .64], [2.6, 2.9, .91], [.9, 4.1, .64], [1.8, 4.9, .97], [.5, 5.9, .64], [.9, 6.5, .97], [0, 7.5, .97]], 12, .01, 6, .02), 0, 0, 0); for (const sg of [-1, 1]) { const cx = sg * 15.5; t.box(cx, 1, 0, 13.2, .4, 38, .91); t.box(cx, 1.45, 18.4, 13.6, 1.8, 1.4, .64); t.box(cx, 1.45, -18.4, 13.6, 1.8, 1.4, .64); t.box(cx - 6.2, 1.45, 0, 1.4, 1.8, 38.2, .64); t.box(cx + 6.2, 1.45, 0, 1.4, 1.8, 38.2, .64); t.box(cx, 2.38, 18.4, 13.8, .18, 1.55, .97); t.box(cx, 2.38, -18.4, 13.8, .18, 1.55, .97); t.box(cx - 6.2, 2.38, 0, 1.55, .18, 38.4, .97); t.box(cx + 6.2, 2.38, 0, 1.55, .18, 38.4, .97); for (const dz of [-18.4, 18.4]) for (const dx of [-6.2, 6.2]) t.box(cx + dx, 2.9, dz, 1.45, 1.4, 1.45, .97) } return t }
+      function oPav() { const t = tn([[4.6, -1.6, .55], [4.2, 0, .62], [3.9, .5, .66], [3.5, .6, .66], [3.2, .8, .66], [0, .85, .66]], 12, .03, 6, .01); for (let k = 0; k < 6; k++) { const a = k / 6 * fe; t.box(oe(a) * 3.2, 3.2, le(a) * 3.2, .54, 5.2, .54, .64) } t.add(fSpire(3.3, 6.6, 3, 14, .91), 0, 5.6, 0); return t }
+      function obelisk() { const t = new Et, h = [[1.05, -1.6, .55], [.95, 0, .62], [.62, 9.4, .66], [.01, 11, .97]], R = []; for (const [w, y2, ao] of h) R.push([t.v(-w, y2, -w, ao), t.v(w, y2, -w, ao), t.v(w, y2, w, ao), t.v(-w, y2, w, ao)]); for (let k = 0; k < R.length - 1; k++)for (let j = 0; j < 4; j++) { const n = (j + 1) % 4; t.quad(R[k][j], R[k][n], R[k + 1][n], R[k + 1][j]) } return t }
+      function sunCry() { const t = new Et, tp = t.v(0, 1.65, 0, 1), bt2 = t.v(0, -1.65, 0, 1), rg = []; for (let k = 0; k < 6; k++) { const a = k / 6 * fe; rg.push(t.v(oe(a) * .65, 0, le(a) * .65, 1)) } for (let k = 0; k < 6; k++) { const n = (k + 1) % 6; t.tri(rg[k], rg[n], tp), t.tri(rg[n], rg[k], bt2) } return t }
+      function wormM() { const t = new Et, N = 64, S = 20, rg = []; for (let i = 0; i <= N; i++) { const u = i / N, z = ae(-18, 18, u), sg = u * 26 - Ae(u * 26); let r = 2.35 * ye(le(he(u, 0, 1) * pt * .72 + .28), .36) * (.86 + .22 * sg); u > .9 && (r *= 1 + (u - .9) * 1.3); const rw = []; for (let j = 0; j < S; j++) { const a = j / S * fe, dr = 1 + .04 * oe(a * 10 + u * 8); rw.push(t.v(oe(a) * r * dr, le(a) * r * dr, z, .4 + .42 * sg)) } rg.push(rw) } for (let i = 0; i < N; i++)for (let j = 0; j < S; j++) { const n = (j + 1) % S; t.quad(rg[i][j], rg[i + 1][j], rg[i + 1][n], rg[i][n]) } const rim = rg[N], iR = [], dR = []; for (let j = 0; j < S; j++) { const a = j / S * fe; iR.push(t.v(oe(a) * 2.05, le(a) * 2.05, 17.2, .1)); dR.push(t.v(oe(a) * 1.25, le(a) * 1.25, 13.6, .04)) } const ct2 = t.v(0, 0, 12.2, .02); for (let j = 0; j < S; j++) { const n = (j + 1) % S; t.quad(rim[j], iR[j], iR[n], rim[n]); t.quad(iR[j], dR[j], dR[n], iR[n]); t.tri(dR[j], ct2, dR[n]) } for (let f = 0; f < 22; f++) { const a = f / 22 * fe, ca = oe(a), sa = le(a); t.tube([[ca * 2.25, sa * 2.25, 17.6], [ca * 1.35, sa * 1.35, 17.5], [ca * .52, sa * .52, 17.1]], k => k === 0 ? .11 : k === 1 ? .06 : .015, 3, !0, () => 1) } for (let f = 0; f < 14; f++) { const a = (f + .5) / 14 * fe, ca = oe(a), sa = le(a); t.tube([[ca * 1.8, sa * 1.8, 16.1], [ca * .95, sa * .95, 15.8], [ca * .32, sa * .32, 15.4]], k => k === 0 ? .09 : k === 1 ? .05 : .012, 3, !0, () => 1) } return t }
+      function tumbM() { ke(310); const t = new Et; for (let k = 0; k < 16; k++) { const a1 = y() * fe, a2 = y() * fe, pts = []; for (let s = 0; s <= 5; s++) { const u = s / 5 * pt - pt / 2, r = .72 + b(-.15, .22); pts.push([oe(u) * oe(a1 + s * .5) * r, le(u) * r, oe(u) * le(a2 + s * .6) * r]) } t.tube(pts, .045, 3, !0, () => .55 + .45 * y()) } return t }
+      const ct = t => document.getElementById(t), tt = ct("c"), cs = ct("i"), ls = document.body, as = matchMedia("(orientation:portrait) and (pointer:coarse)"), sb = ct("sb"), sp = ct("sp"), rL = ct("rL"), tA = ct("tA"), tS = ct("tS"), pcE = ct("pc"); let fs = 0, nn, spO = !1;
+      const setSp = v => { spO = v, sp.classList.toggle("on", v), sb.classList.toggle("on", v), v && document.pointerLockElement && document.exitPointerLock() };
+      sb.onclick = e => { e.stopPropagation(), setSp(!spO) }; sp.addEventListener("click", e => e.stopPropagation());
+      const Ft = (t, e, c) => { nn || (ct("s").textContent = t, pcE.textContent = we(e * 100) + "%"); const r = ct("b").animate({ transform: [`scaleX(${fs})`, `scaleX(${e})`] }, { duration: c, fill: "forwards", easing: "cubic-bezier(.3,.5,.5,1)" }); return fs = e, new Promise(o => { r.ready.then(() => setTimeout(o)), setTimeout(o, document.hidden ? 0 : 1e3) }) }, us = t => { throw new Error(t, { cause: 1 }) };
+      navigator.gpu || us("This realm requires WebGPU. Try a current Chrome or Edge.");
+      const sn = await navigator.gpu.requestAdapter({ powerPreference: "high-performance" }); sn || us("No WebGPU adapter found."), ct("w").hidden = !!navigator.userAgentData;
+      const rn = sn.features.has("timestamp-query"), Y = await sn.requestDevice({ requiredFeatures: rn ? ["timestamp-query"] : [] });
+      let gErr = 0; Y.addEventListener("uncapturederror", t => { console.error("GPU: " + t.error.message), ++gErr < 4 && (cs.textContent += (cs.textContent ? "\n" : "") + "GPU: " + t.error.message) }), Y.lost.then(t => { t.reason !== "destroyed" && (me < 2 && (Rt("ms10", me + 1), location.reload()), nn = ls.className = "l e", ct("s").textContent = "The graphics device was lost. Reload the page to try again.") });
+      const ps = tt.getContext("webgpu"), vs = navigator.gpu.getPreferredCanvasFormat(), nt = Y.queue, Fe = "rgba16float", Xt = "depth32float", ue = GPUTextureUsage, ee = GPUBufferUsage, f0 = GPUShaderStage, We = t => Y.createShaderModule({ code: t }), Be = (t, e) => { const c = Y.createBuffer({ size: t.byteLength + 3 & -4, usage: e | ee.COPY_DST }); return nt.writeBuffer(c, 0, t.buffer || t, t.byteOffset || 0, t.byteLength), c }, Xe = (t, e, c, r, o = {}) => Y.createTexture({ size: [t, e, o.d || 1], format: c, usage: r, mipLevelCount: o.mips || 1, sampleCount: o.samples || 1, dimension: o.d ? "3d" : "2d" }), ds = Y.createSampler({ addressModeU: "repeat", addressModeV: "repeat", magFilter: "linear", minFilter: "linear", mipmapFilter: "linear", maxAnisotropy: me > 1 ? 1 : 8 }), u0 = Y.createSampler({ magFilter: "linear", minFilter: "linear" }), ms = Y.createSampler({ compare: "less-equal", magFilter: "linear", minFilter: "linear" }), on = Xe(i0, i0, Xt, ue.RENDER_ATTACHMENT | ue.TEXTURE_BINDING), lo = Xe(1, 1, Xt, ue.RENDER_ATTACHMENT | ue.TEXTURE_BINDING), cn = Xe(j0, j0, Fe, ue.RENDER_ATTACHMENT | ue.TEXTURE_BINDING, { mips: 5 }), p0 = Xe(1024, 1024, "rgba8unorm", ue.RENDER_ATTACHMENT | ue.TEXTURE_BINDING, { mips: 11 }), ln = Xe(J / 2, se / 2, "rg8unorm", ue.TEXTURE_BINDING | ue.COPY_DST, { d: $e / 2 }), gs = Xe(512, 512, "rgba8unorm", ue.TEXTURE_BINDING | ue.COPY_DST), bt = new Float32Array(84), lt = new Float32Array(84), v0 = Y.createBuffer({ size: 336, usage: ee.UNIFORM | ee.COPY_DST }), xs = Y.createBuffer({ size: 336, usage: ee.UNIFORM | ee.COPY_DST }), bs = new Float32Array(4), ys = Y.createBuffer({ size: 16, usage: ee.UNIFORM | ee.COPY_DST }), at = f0.VERTEX | f0.FRAGMENT, ws = Y.createBindGroupLayout({ entries: [{ binding: 0, visibility: at, buffer: {} }, { binding: 1, visibility: at, sampler: {} }, { binding: 2, visibility: at, sampler: {} }, { binding: 3, visibility: at, sampler: { type: "comparison" } }, { binding: 4, visibility: at, texture: { sampleType: "depth" } }, { binding: 5, visibility: at, texture: {} }, { binding: 6, visibility: at, texture: {} }, { binding: 7, visibility: at, texture: { viewDimension: "3d" } }, { binding: 8, visibility: at, texture: {} }] }), hs = (t, e) => Y.createBindGroup({ layout: ws, entries: [{ binding: 0, resource: { buffer: t } }, { binding: 1, resource: ds }, { binding: 2, resource: u0 }, { binding: 3, resource: ms }, { binding: 4, resource: e.createView() }, { binding: 5, resource: cn.createView() }, { binding: 6, resource: p0.createView() }, { binding: 7, resource: ln.createView() }, { binding: 8, resource: gs.createView() }] }), ao = hs(v0, on), fo = hs(xs, lo), zs = Y.createPipelineLayout({ bindGroupLayouts: [ws] }), Ss = Y.createBindGroupLayout({ entries: [{ binding: 0, visibility: f0.FRAGMENT, texture: {} }, { binding: 1, visibility: f0.FRAGMENT, sampler: {} }] }), uo = Y.createPipelineLayout({ bindGroupLayouts: [Ss] }), As = We(Gr), Ht = (t, e, c) => Y.createRenderPipeline({ layout: uo, vertex: { module: As, entryPoint: "vs" }, fragment: { module: As, entryPoint: t, targets: [{ format: e, blend: c ? { color: { srcFactor: "one", dstFactor: "one" }, alpha: { srcFactor: "one", dstFactor: "one" } } : void 0 }] } }), po = Ht("fsMip", "rgba8unorm"), vo = Ht("fsMip", Fe), mo = Ht("fsDown0", Fe), go = Ht("fsDown", Fe), xo = Ht("fsUp", Fe, !0), d0 = t => Y.createBindGroup({ layout: Ss, entries: [{ binding: 0, resource: t }, { binding: 1, resource: u0 }] }), Bt = (t, e) => ({ view: t, loadOp: e ? "clear" : "load", storeOp: "store", clearValue: [0, 0, 0, 0] }), _e = (t, e, c) => ({ shaderLocation: t, offset: e, format: c }), Ct = { arrayStride: 16, attributes: [_e(0, 0, "float32x3"), _e(1, 12, "snorm8x4")] }, m0 = { arrayStride: 48, stepMode: "instance", attributes: [_e(2, 0, "float32x4"), _e(3, 16, "float32x4"), _e(4, 32, "float32x4")] }, Kt = { arrayStride: 36, stepMode: "instance", attributes: [_e(0, 0, "float32x4"), _e(1, 16, "float32x4"), _e(2, 32, "unorm8x4")] }, ks = { arrayStride: 32, stepMode: "instance", attributes: [_e(2, 0, "float32x4"), _e(3, 16, "float32x4")] }, Rs = { arrayStride: 32, stepMode: "instance", attributes: [_e(0, 0, "float32x4"), _e(1, 16, "float32x4")] }, bo = { arrayStride: 16, stepMode: "instance", attributes: [_e(0, 0, "float32x4")] }, Ie = (t, e, c, r, o = {}) => Y.createRenderPipeline({ layout: zs, vertex: { module: t, entryPoint: e, buffers: r, constants: o.constants }, fragment: { module: t, entryPoint: c, targets: [{ format: Fe, blend: o.blend }] }, primitive: { topology: o.strip ? "triangle-strip" : "triangle-list", cullMode: o.cull || "none" }, depthStencil: { format: Xt, depthWriteEnabled: !o.blend, depthCompare: "greater" }, multisample: { count: rt } }), an = (t, e, c, r = {}) => Y.createRenderPipeline({ layout: zs, vertex: { module: t, entryPoint: e, buffers: c, constants: r.constants }, primitive: { topology: r.strip ? "triangle-strip" : "triangle-list", cullMode: r.cull || "none" }, depthStencil: { format: Xt, depthWriteEnabled: !0, depthCompare: "less", depthBias: 2, depthBiasSlopeScale: 2 } });
+      await Ft("Compiling shaders\u2026", .08, 260);
+      const g0 = We(Xr), Ot = We(Hr), Es = We(Kr), Bs = We(Yr), Ls = We(jr), yo = Ie(g0, "vs", "fs", [Ct, m0], { cull: "back" }), wo = Ie(g0, "vs", "fs", [Ct, m0]), ho = Ie(Ot, "vs", "fs", [Kt], { strip: !0, constants: { ROWS: 9 } }), zo = Ie(Ot, "vs", "fs", [Kt], { strip: !0, constants: { ROWS: 5 } }), So = Ie(Ot, "vs", "fs", [Kt], { strip: !0, constants: { ROWS: 3, FAR: 110 } }), Ao = Ie(Ot, "vs", "fs", [Kt], { strip: !0, constants: { ROWS: 3 } }), ko = Ie(Es, "vsT", "fsT", [Ct, ks]), Ro = Ie(Es, "vsW", "fsW", [Ct, ks]), Eo = Ie(Bs, "vs", "fs", [], { strip: !0 }), Bo = Ie(Bs, "vsB", "fsB", [], { strip: !0 }), Lo = Ie(Ls, "vsB", "fsB", [Rs], { strip: !0, blend: { color: { srcFactor: "one", dstFactor: "one-minus-src-alpha" }, alpha: { srcFactor: "one", dstFactor: "one-minus-src-alpha" } } }), Ps = { color: { srcFactor: "one", dstFactor: "one" }, alpha: { srcFactor: "one", dstFactor: "one" } }, Po = Ie(Ls, "vsS", "fsS", [bo], { strip: !0, blend: Ps }), qo = Ie(Ot, "vsGl", "fsGl", [Rs], { strip: !0, blend: Ps }), Vo = an(g0, "vs", [Ct, m0]), To = an(g0, "vs", [Ct, m0], { cull: "front" }), No = an(Ot, "vs", [Kt], { strip: !0, constants: { ROWS: 3 } }), qs = We(Wr), Vs = Y.createRenderPipeline({ layout: "auto", vertex: { module: qs, entryPoint: "vs" }, fragment: { module: qs, entryPoint: "fs", targets: [{ format: Fe }] } }), Fo = Y.createBindGroup({ layout: Vs.getBindGroupLayout(0), entries: [{ binding: 0, resource: { buffer: ys } }] }), Ts = [0, 1, 2, 3, 4].map(t => cn.createView({ baseMipLevel: t, mipLevelCount: 1 })), Co = Ts.map(t => d0(t)), fn = Ts.map(t => ({ colorAttachments: [Bt(t, !0)] })), Ns = We($r), Fs = We(Qr), Cs = We(Zr), Os = Y.createRenderPipeline({ layout: "auto", vertex: { module: Cs, entryPoint: "vs" }, fragment: { module: Cs, entryPoint: "fs", targets: [{ format: Fe }] } }), Ms = Y.createRenderPipeline({ layout: "auto", vertex: { module: Ns, entryPoint: "vs" }, fragment: { module: Ns, entryPoint: "fs", targets: [{ format: Fe }] } }), Us = Y.createRenderPipeline({ layout: "auto", vertex: { module: Fs, entryPoint: "vs" }, fragment: { module: Fs, entryPoint: "fs", targets: [{ format: vs }] } });
+      await Ft("Sculpting desert & cavern\u2026", .28, 1e3), Rt("msl10", 1), addEventListener("pagehide", () => Rt("msl10", ""));
+      let Pe; { const t = Jr(), e = We(Ir), c = Y.createComputePipeline({ layout: "auto", compute: { module: e, entryPoint: "main" } }), r = J * se * $e * 4, o = new ArrayBuffer(48), l = new Uint32Array(o), s = new Float32Array(o); l[0] = J, l[1] = se, l[2] = $e, s[4] = it, s[5] = gt, s[6] = et, s[7] = Re, l[8] = ns.length, l[9] = ss.length, l[10] = 0, l[11] = os.length; const n = Be(new Uint8Array(o), ee.UNIFORM), u = Be(t, ee.STORAGE), f = Y.createBuffer({ size: r, usage: ee.STORAGE | ee.COPY_SRC }), m = Y.createBuffer({ size: r, usage: ee.MAP_READ | ee.COPY_DST }), x = Y.createBindGroup({ layout: c.getBindGroupLayout(0), entries: [{ binding: 0, resource: { buffer: n } }, { binding: 1, resource: { buffer: f } }, { binding: 2, resource: { buffer: u } }] }), h = Y.createCommandEncoder(), A = h.beginComputePass(); A.setPipeline(c), A.setBindGroup(0, x), A.dispatchWorkgroups(J / 4, se / 4, $e / 4), A.end(), h.copyBufferToBuffer(f, 0, m, 0, r), nt.submit([h.finish()]), await m.mapAsync(GPUMapMode.READ), Pe = new Float32Array(m.getMappedRange().slice(0)), m.unmap(), m.destroy(), f.destroy(); const E = J * se, N = new Uint8Array(Pe.length), L = [1, -1, J, -J, E, -E], i = new Uint8Array(J), S = []; for (let v = 0; v < Pe.length;) { i.fill(1); for (let B = 0; B < se; B++)for (let q = 0; q < J; q++, v++)Pe[v] <= 0 ? i[q] = 0 : i[q] ? N[v] = 1 : S.push(v) } for (let v = 1; v; S.reverse()) { v = 0; for (const B of S) !N[B] && L.some(q => N[B + q]) && (N[B] = v = 1) } for (const v of S) N[v] || (Pe[v] = -Pe[v]) }
+      const x0 = 52, yt = 102, Is = new Uint16Array(yt * yt * se / 4); let b0 = new Int8Array(64 * 65534); { let t = 0; for (let e = 0; e < yt; e++)for (let c = 1; c < se / 4 - 1; c++)for (let r = 0; r < yt; r++) { if (K(r - yt / 2 + .5, e - yt / 2 + .5) > 52) continue; let o = 127, l = -127; for (let s = 0; s < 4; s++)for (let n = 0; n < 4; n++)for (let u = 0; u < 4; u++) { const f = x0 + r * 4 + u + J * (c * 4 + n + se * (x0 + e * 4 + s)), m = Pe[f + J * se] - Pe[f - J * se], x = Pe[f + 1] - Pe[f - 1], h = Pe[f + J] - Pe[f - J], A = Ye(x * x + h * h + m * m) / 1.5, E = we(he(Pe[f] / ne(A, .05), -1, 1) * 127); b0[t * 64 + u + 4 * n + 16 * s] = E, E < o && (o = E), E > l && (l = E) } Is[r + yt * (c + se / 4 * e)] = o === l && o * o === 16129 ? +(o > 0) : (t++, t + 1) } b0 = b0.slice(0, t * 64) }
+      await Ft("Carving oasis cavern & arches\u2026", .42, 360);
+      const He = eo(Pe), Yt = SC.map(s => s.v.slice()), un = Yt.map(t => [t[0], -20, t[2]]), R = new Float64Array(32), qe = new Float64Array(6), Ce = 0, Oe = 1, Me = 2, w0 = 3, h0 = 4, Gs = 5, Ws = 6, Xs = 7, Hs = 8, Ks = 9, Ys = 10, js = 11, $s = 12, $t = 13, Zt = 14, Qt = 15, pn = 16, vn = 18, Qs = 19, z0 = 20, S0 = 22, A0 = 23, k0 = 24;
+      function Js() { const t = qe[3] - qe[0], e = qe[4] - qe[1], c = qe[5] - qe[2]; R[Ce] = qe[0], R[Oe] = qe[1], R[Me] = qe[2], R[w0] = $0(t, -c), R[h0] = $0(e, Ye(t * t + c * c)), R[$t] = R[Zt] = R[Qt] = 0 }
+      const er = (t, e, c, r, o, l) => { qe[0] = t, qe[1] = e, qe[2] = c, qe[3] = r, qe[4] = o, qe[5] = l, Js() };
+      await Ft("Raising the fairytale palace\u2026", .74, 1200);
+      const I = to(Pe, He, un); for (const t of Yt) t[1] += I.gy(t[0], t[2]); Pe = I.gy = He.smp = null;
+      await Ft("Awakening Solara\u2026", .92, 500);
+      const xe = [Ne(1, 3), Ne(7, 3), Ne(13, 3), Ne(22, 3), tn([[0, 0, .5], [.38, 0, .6], [.52, .22, .85], [.58, .58, 1], [.46, .92, 1], [.24, 1.02, .8], [0, .95, .4]], 24, .12, 14, .09), saguaro(), tn([[0, -.3, .5], [.75, -.2, .65], [.55, .4, .75], [.38, 1.2, .82], [.68, 2.1, .95], [.95, 2.7, 1], [.82, 3.1, .95], [.35, 3.3, .9], [0, 3.35, .85]], 16, .24, 5, .06), a0(0), a0(1), palmTrunk(), sKeep(), fTurret(), pWall(), sGate(), oPav(), obelisk(), sunCry(), pWing(), pCourt(), wormM(), tumbM(), Ne(3), Ne(11), Ne(29), Ne(5, 3), Ne(17, 3), Ne(41, 3), Ne(9, 1), a0(0, 1), a0(1, 1), Ne(5, 2, 1), Ne(17, 2, 1), Ne(41, 2, 1)].map(t => t.build());
+      let mn = 0, gn = 0; for (const t of xe) t.v0 = mn, t.i0 = gn, mn += t.nv, gn += t.ib.length;
+      const nr = new Uint8Array(mn * 16), sr = new Uint32Array(gn); for (const t of xe) nr.set(new Uint8Array(t.vb), t.v0 * 16), sr.set(t.ib, t.i0);
+      const rr = Be(nr, ee.VERTEX), or = Be(sr, ee.INDEX), ir = Be(new Uint8Array(He.vb), ee.VERTEX), cr = Be(He.ib, ee.INDEX), tIdxN = He.ib.length, R0 = I.solids.data.length / 12, xn = new Float32Array((R0 + 1) * 12); xn.set(I.solids.data), xn.set([0, 0, 0, 1, 0, 0, 0, 1, 0, 0, 1, 0], R0 * 12);
+      const lr = Be(xn, ee.VERTEX), ar = I.chunks.map(t => Be(t.data, ee.VERTEX)), fr = I.props.map(t => Be(t.data, ee.VERTEX)), ur = Be(new Uint8Array(I.big.buf), ee.VERTEX), Mo = Be(new Uint8Array(I.bigF.buf), ee.VERTEX), Uo = Be(new Uint8Array(I.small.buf), ee.VERTEX), _o = Be(I.fish, ee.VERTEX), Io = Be(I.mantas, ee.VERTEX), Do = Be(I.bubbles, ee.VERTEX), Go = Be(I.snow, ee.VERTEX), Wo = Be(I.glints, ee.VERTEX), Xo = I.glints.length / 8, Ho = I.fish.length / 8, Ko = I.mantas.length / 8, Yo = I.bubbles.length / 8, jo = I.snow.length / 4, bn = xe[19], yn = xe[20], bigN = I.big.n, chunkN = I.chunks.map(c => c.n), propN = I.props.map(p => p.n);
+      nt.writeTexture({ texture: ln }, I.volD, { bytesPerRow: J, rowsPerImage: se / 2 }, [J / 2, se / 2, $e / 2]), nt.writeTexture({ texture: gs }, I.gm, { bytesPerRow: 2048 }, [512, 512]);
+      { const t = We(Dr), e = Y.createRenderPipeline({ layout: "auto", vertex: { module: t, entryPoint: "vs" }, fragment: { module: t, entryPoint: "fs", targets: [{ format: "rgba8unorm" }] } }), c = Y.createCommandEncoder(); let r = c.beginRenderPass({ colorAttachments: [Bt(p0.createView({ baseMipLevel: 0, mipLevelCount: 1 }), !0)] }); r.setPipeline(e), r.draw(3), r.end(); for (let o = 1; o < 11; o++)r = c.beginRenderPass({ colorAttachments: [Bt(p0.createView({ baseMipLevel: o, mipLevelCount: 1 }), !0)] }), r.setPipeline(po), r.setBindGroup(0, d0(p0.createView({ baseMipLevel: o - 1, mipLevelCount: 1 }))), r.draw(3), r.end(); nt.submit([c.finish()]) }
+      const shView = on.createView(), shDesc = { colorAttachments: [], depthStencilAttachment: { view: shView, depthClearValue: 1, depthLoadOp: "clear", depthStoreOp: "store" } }, shCmd = [null];
+      function bakeShadow(sD) { const tx = sD[0], ty = sD[1], tz = sD[2]; let uy = 1, uz = 0; ge(ty) > .98 && (uy = 0, uz = 1); let ex = uy * tz - uz * ty, ey = uz * tx, ez = -uy * tx; const el = K(ex, ey, ez) || 1; ex /= el, ey /= el, ez /= el; const rx = ty * ez - tz * ey, ry = tz * ex - tx * ez, rz = tx * ey - ty * ex, o = 335, l = -395, s = 395, c0 = -14, n = lt; n[0] = ex / o, n[4] = ey / o, n[8] = ez / o, n[12] = -ey * c0 / o, n[1] = rx / o, n[5] = ry / o, n[9] = rz / o, n[13] = -ry * c0 / o, n[2] = -tx / (s - l), n[6] = -ty / (s - l), n[10] = -tz / (s - l), n[14] = (s + ty * c0) / (s - l), n[3] = 0, n[7] = 0, n[11] = 0, n[15] = 1; for (let u = 0; u < 16; u++)lt[16 + u] = n[u], bt[16 + u] = n[u]; bt[48] = lt[48] = tx, bt[49] = lt[49] = ty, bt[50] = lt[50] = tz, lt[32] = 0, lt[33] = -10, lt[34] = 0, lt[35] = 0, lt[52] = 0, lt[58] = 1, nt.writeBuffer(xs, 0, lt); const c = Y.createCommandEncoder(), r = c.beginRenderPass(shDesc); r.setBindGroup(0, fo), r.setPipeline(To), r.setVertexBuffer(0, ir), r.setVertexBuffer(1, lr), r.setIndexBuffer(cr, "uint32"), r.drawIndexed(tIdxN, 1, 0, 0, R0), r.setPipeline(Vo), r.setVertexBuffer(0, rr), r.setIndexBuffer(or, "uint32"); for (let k = 0; k < 19; k++) { if (k === 16) continue; const rg = I.solids.ranges[k]; rg[1] && r.drawIndexed(xe[k].ib.length, rg[1], xe[k].i0, xe[k].v0, rg[0]) } if (!me) for (let k = 0; k < Q0; k++)chunkN[k] && (r.setVertexBuffer(1, ar[k]), r.drawIndexed(xe[21 + k].ib.length, chunkN[k], xe[21 + k].i0, xe[21 + k].v0, 0)); for (let k = 0; k < 6; k++)(!me || k === 5) && propN[k] && (r.setVertexBuffer(1, fr[k]), r.drawIndexed(xe[4 + k].ib.length, propN[k], xe[4 + k].i0, xe[4 + k].v0, 0)); r.setPipeline(No), r.setVertexBuffer(0, ur), r.draw(6, bigN), r.end(), shCmd[0] = c.finish(), nt.submit(shCmd) }
+      for (const t of [I.big, I.bigF, I.small, ...I.chunks, ...I.props]) t.buf = t.data = 0; I.glints = I.volD = I.gm = He.vb = He.ib = He.wp = He.wn = 0;
+      const pr = 2560 * 1440, vr = st ? 25e4 : 5e5, E0 = .4; let Ve = 0, Ue = 0, Jt = 0, B0 = 0, Ze = +Pt[1] || (me > 1 ? 41e4 : st ? 1280 * 720 : pr), Te = +Pt[2] || 1, L0 = 0, _t = 0, P0 = 0, e0 = 0, wn = 0, hn = 0, zn = 3, dr, mr, gr, xr, q0, br, yr, t0 = [], V0 = [], Sn = []; const T0 = 6;
+      function An() { Jt = ne(2, we(tt.clientWidth * devicePixelRatio)), B0 = ne(2, we(tt.clientHeight * devicePixelRatio)); const t = Ee(1, Ye(Ze / (Jt * B0))), e = ne(2, we(Jt * t) & -2), c = ne(2, we(B0 * t) & -2); if (e === Ve && c === Ue) return; L0 = P0 = e0 = 0, _t = -300, Ve = e, Ue = c, tt.width = Ve, tt.height = Ue, rL.textContent = `${Ve}×${Ue}`, ps.configure({ device: Y, format: vs, alphaMode: "opaque" }); for (const E of Sn) E.destroy(); const r = Xe(rt > 1 ? Ve : 1, Ue, Fe, ue.RENDER_ATTACHMENT, { samples: rt }), o = Xe(Ve, Ue, Xt, ue.RENDER_ATTACHMENT | ue.TEXTURE_BINDING, { samples: rt }), l = Xe(Ve, Ue, Fe, ue.RENDER_ATTACHMENT | ue.TEXTURE_BINDING), s = Xe(Ve / 2, Ue / 2, Fe, ue.RENDER_ATTACHMENT | ue.TEXTURE_BINDING), n = Xe(Ve / 2, Ue / 2, Fe, ue.RENDER_ATTACHMENT | ue.TEXTURE_BINDING); Sn = [r, o, l, s, n]; const u = []; for (let E = 0; E < T0; E++) { const N = Xe(ne(1, Ve >> E + 1), ne(1, Ue >> E + 1), Fe, ue.RENDER_ATTACHMENT | ue.TEXTURE_BINDING); u.push(N), Sn.push(N) } const f = o.createView(), m = l.createView(), x = s.createView(), h = n.createView(), A = u.map(E => E.createView()); dr = { colorAttachments: [{ view: rt > 1 ? r.createView() : m, resolveTarget: rt > 1 ? m : void 0, loadOp: "clear", storeOp: rt > 1 ? "discard" : "store", clearValue: [0, 0, 0, 1] }], depthStencilAttachment: { view: f, depthClearValue: 0, depthLoadOp: "clear", depthStoreOp: "store" } }, mr = { colorAttachments: [Bt(x, !0)] }, gr = { colorAttachments: [Bt(h, !0)] }, xr = Y.createBindGroup({ layout: Os.getBindGroupLayout(0), entries: [{ binding: 0, resource: x }] }), q0 = { colorAttachments: [{ view: null, loadOp: "clear", storeOp: "store", clearValue: [0, 0, 0, 1] }] }, br = Y.createBindGroup({ layout: Ms.getBindGroupLayout(0), entries: [{ binding: 0, resource: { buffer: v0 } }, { binding: 1, resource: ds }, { binding: 2, resource: ms }, { binding: 3, resource: shView }, { binding: 4, resource: cn.createView() }, { binding: 5, resource: f }, { binding: 6, resource: ln.createView() }, { binding: 7, resource: u0 }] }), yr = Y.createBindGroup({ layout: Us.getBindGroupLayout(0), entries: [{ binding: 0, resource: { buffer: v0 } }, { binding: 1, resource: u0 }, { binding: 2, resource: m }, { binding: 3, resource: h }, { binding: 4, resource: A[0] }, { binding: 5, resource: f }] }), t0 = [], V0 = []; for (let E = 0; E < T0; E++)t0.push({ colorAttachments: [Bt(A[E], !0)] }), V0.push(d0(E ? A[E - 1] : m)); for (let E = T0 - 1; E > 0; E--)t0.push({ colorAttachments: [Bt(A[E - 1], !1)] }), V0.push(d0(A[E])); bt[52] = Ve, bt[53] = Ue, bt[54] = 1 / Ve, bt[55] = 1 / Ue }
+      An(), addEventListener("resize", An);
+      let N0, kn, F0 = [], wr, hr; if (rn) { N0 = Y.createQuerySet({ type: "timestamp", count: 2 }), kn = Y.createBuffer({ size: 16, usage: ee.QUERY_RESOLVE | ee.COPY_SRC }); for (let t = 0; t < 6; t++) { const e = Y.createBuffer({ size: 16, usage: ee.MAP_READ | ee.COPY_DST }), c = { b: e, busy: !1, done: null }; c.done = () => { const r = new BigInt64Array(e.getMappedRange()), o = Number(r[1] - r[0]) / 1e6; R[Qs] = o, e.unmap(), c.busy = !1, _t > 0 && o > 0 && o < 1e3 && (P0 += o, e0++) }, F0.push(c) } wr = { querySet: N0, beginningOfPassWriteIndex: 0 }, hr = { querySet: N0, endOfPassWriteIndex: 1 } }
+      const hudB = ct("bar").querySelectorAll("button"), capE = ct("cap"); let capT = 0, windP = 0;
+      function setScene(idx, mv = !0) { curS = idx; const s = SC[idx]; for (let k = 0; k < 4; k++)bt[60 + k] = s.sc[k], bt[64 + k] = s.st[k], bt[68 + k] = s.sh[k], bt[72 + k] = s.fc[k], bt[76 + k] = s.ac[k], bt[80 + k] = s.fx[k]; bt[56] = s.ex, bt[57] = s.ry, bakeShadow(s.sun), mv && er(...Yt[idx]), hudB.forEach((b, k) => b.classList.toggle("on", k === idx)), capE.textContent = `${idx + 1} · ${s.n} — ${s.d}`, capE.classList.remove("f"), clearTimeout(capT), capT = setTimeout(() => capE.classList.add("f"), 4500) }
+      hudB.forEach((b, idx) => b.addEventListener("click", e => { e.stopPropagation(), W0(), setScene(idx, !0) }));
+      let Rn = !1, En = 0, Bn = 0, Ln = 0, Pn = 0, qn = 0, Vn = 0, Tn = 0, C0 = 0, O0 = 0, M0 = 0, U0 = 0, Nn = 0, Fn = 0, Cn = 0, _0 = 0, I0 = 1e9, On = 1e9, Mn = 0, Un = 0, It = -1, n0 = 0, zr = 0, Sr = 0, _n = 0, In = 0, drg = !1;
+      const Dt = .6, Ar = .1, kr = [null], D0 = new Uint8Array(ie);
+      function ft(t, e, c, r, o, l, s, n, u) { const f = R[Ce], m = R[Oe], x = R[Me], h = R[Gs], A = R[Ws], E = R[Xs], N = R[Hs], L = R[Ks], i = R[Ys], S = R[js], v = R[$s], B = l === 1 ? 1 : Te * Te, q = Dt * Ve / Ue, O = xt * .5, C = O + o, z = n * n * B, k = u * u * B; for (let M = 0; M < ie; M++) { const U = D0[M], Q = U * ie, j = et + (U + .5) * xt - x, ze = ne(ge(j) - O, 0); let re = -1; for (let X = 0; X <= ie; X++) { const F = Q + X; let G = !1; if (X < ie) { const _ = c[F], $ = r[F]; if (_ <= $) { const ce = it + (X + .5) * xt - f, De = (_ + $) * .5 - m, Le = ($ - _) * .5 + o, Qe = ne(ge(ce) - O, 0), zt = Qe * Qe + ze * ze; if (zt < k && zt >= z) { const Gt = ce * h + De * A + j * E + C * ge(h) + Le * ge(A) + C * ge(E); Gt >= 0 && ge(ce * N + j * L) - C * (ge(N) + ge(L)) <= Gt * q && (G = ge(ce * i + De * S + j * v) - C * (ge(i) + ge(v)) - Le * ge(S) <= Gt * Dt) } } } if (G) re < 0 && (re = F); else if (re >= 0) { const _ = e[re], $ = e[F] - _; $ > 0 && (l === 1 ? t.drawIndexed($ * 6, 1, _ * 6, 0, R0) : l ? t.drawIndexed(l.ib.length, $, l.i0, l.v0, _) : t.draw(s, $, 0, _)), re = -1 } } } }
+      function Rr() { const t = R[Ce], e = R[Oe], c = R[Me], r = R[h0], o = R[w0], l = oe(r), s = le(r), n = oe(o), u = le(o), f = l * u, m = -l * n, x = -u * s, h = u * f - n * m, A = n * s; R[Gs] = f, R[Ws] = s, R[Xs] = m, R[Hs] = n, R[Ks] = u, R[Ys] = x, R[js] = h, R[$s] = A; const E = Ve / Ue, N = 1 / (Dt * E), L = 1 / Dt, i = bt; i[0] = n * N, i[4] = 0, i[8] = u * N, i[12] = -(n * t + u * c) * N, i[1] = x * L, i[5] = h * L, i[9] = A * L, i[13] = -(x * t + h * e + A * c) * L, i[2] = 0, i[6] = 0, i[10] = 0, i[14] = Ar, i[3] = f, i[7] = s, i[11] = m, i[15] = -(f * t + s * e + m * c), i[32] = t, i[33] = e, i[34] = c, i[35] = R[pn], i[36] = n, i[37] = 0, i[38] = u, i[39] = Dt * E, i[40] = x, i[41] = h, i[42] = A, i[43] = Dt, i[44] = f, i[45] = s, i[46] = m, i[47] = Ar; const ox = t - OX, oz = c - OZ; let ob = (66 - Ye(ox * ox + oz * oz)) / 28; ob = ob < 0 ? 0 : ob > 1 ? 1 : ob, i[51] = ob * ob * (3 - 2 * ob), i[58] = Te, i[59] = windP, nt.writeBuffer(v0, 0, bt), bs[0] = windP, nt.writeBuffer(ys, 0, bs); { let k = Ae((c - et) / xt) | 0; k = k < 0 ? 0 : k > ie - 1 ? ie - 1 : k; let M = 0; D0[M++] = k; for (let U = 1; U < ie; U++)k - U >= 0 && (D0[M++] = k - U), k + U < ie && (D0[M++] = k + U) } const O = Y.createCommandEncoder(); let C = null; if (rn) { for (let k = 0; k < F0.length; k++)if (!F0[k].busy) { C = F0[k]; break } } fn[0].timestampWrites = C ? wr : void 0, q0.timestampWrites = C ? hr : void 0; let z = O.beginRenderPass(fn[0]); z.setPipeline(Vs), z.setBindGroup(0, Fo), z.draw(3), z.end(); for (let k = 1; k < 5; k++)z = O.beginRenderPass(fn[k]), z.setPipeline(vo), z.setBindGroup(0, Co[k - 1]), z.draw(3), z.end(); z = O.beginRenderPass(dr), z.setBindGroup(0, ao), z.setPipeline(yo), z.setVertexBuffer(0, ir), z.setVertexBuffer(1, lr), z.setIndexBuffer(cr, "uint32"), ft(z, He.start, He.lo, He.hi, 2.5, 1, 0, 0, 375), z.setPipeline(wo), z.setVertexBuffer(0, rr), z.setIndexBuffer(or, "uint32"); for (let k = 0; k < 19; k++) { const M = I.solids.ranges[k]; M[1] && z.drawIndexed(xe[k].ib.length, M[1], xe[k].i0, xe[k].v0, M[0]) } for (let k = 0; k < Q0; k++) { const M = I.chunks[k], U = k > 2 && k < 6; z.setVertexBuffer(1, ar[k]), ft(z, M.start, M.lo, M.hi, 4.5, xe[21 + k], 0, 0, k > 5 ? 45 : U ? 64 : 140), U && ft(z, M.start, M.lo, M.hi, 4.5, xe[27 + k], 0, 64, 225) } for (let k = 0; k < 6; k++) { const M = k === 3 || k === 4; z.setVertexBuffer(1, fr[k]), ft(z, I.props[k].start, I.props[k].lo, I.props[k].hi, 6, xe[4 + k], 0, 0, M ? 12 : 205), M && ft(z, I.props[k].start, I.props[k].lo, I.props[k].hi, 6, xe[25 + k], 0, 12, 175) } z.setPipeline(Ro), z.setVertexBuffer(1, Io), z.drawIndexed(bn.ib.length, Ko, bn.i0, bn.v0, 0), z.setPipeline(ko), z.setVertexBuffer(1, _o), z.drawIndexed(yn.ib.length, Ho, yn.i0, yn.v0, 0), z.setPipeline(ho), z.setVertexBuffer(0, ur), ft(z, I.big.start, I.big.lo, I.big.hi, 8, !1, 18, 0, 42), z.setPipeline(zo), ft(z, I.big.start, I.big.lo, I.big.hi, 8, !1, 10, 42, 100), z.setPipeline(Ao), z.setVertexBuffer(0, Mo), ft(z, I.bigF.start, I.bigF.lo, I.bigF.hi, 8, !1, 6, 100, 235), z.setPipeline(So), z.setVertexBuffer(0, Uo), ft(z, I.small.start, I.small.lo, I.small.hi, 2.5, !1, 6, 0, 115), z.setPipeline(Eo), z.draw(4, 3), z.setPipeline(Bo), z.draw(4), z.setPipeline(Lo), z.setVertexBuffer(0, Do), z.draw(4, Yo), z.setPipeline(qo), z.setVertexBuffer(0, Wo), z.draw(4, Xo), z.setPipeline(Po), z.setVertexBuffer(0, Go), z.draw(4, jo), z.end(), z = O.beginRenderPass(mr), z.setPipeline(Ms), z.setBindGroup(0, br), z.draw(3), z.end(), z = O.beginRenderPass(gr), z.setPipeline(Os), z.setBindGroup(0, xr), z.draw(3), z.end(); for (let k = 0; k < t0.length; k++)z = O.beginRenderPass(t0[k]), z.setPipeline(k === 0 ? mo : k < T0 ? go : xo), z.setBindGroup(0, V0[k]), z.draw(3), z.end(); q0.colorAttachments[0].view = ps.getCurrentTexture().createView(), z = O.beginRenderPass(q0), z.setPipeline(Us), z.setBindGroup(0, yr), z.draw(3), z.end(), C && (O.resolveQuerySet(N0, 0, 2, kn, 0), O.copyBufferToBuffer(kn, 0, C.b, 0, 16)), kr[0] = O.finish(), nt.submit(kr), C && (C.busy = !0, C.b.mapAsync(GPUMapMode.READ).then(C.done)) }
+      const Dn = new Float64Array([0, 0, 0, .575, 0, 0, -.575, 0, 0, 0, .575, 0, 0, -.575, 0, 0, 0, .575, 0, 0, -.575]), wt = new Float64Array(7), ht = (t, e, c) => { const r = Is[(t >> 2) + yt * ((e >> 2) + se / 4 * (c >> 2))]; return r > 1 ? b0[r * 64 - 128 + (t & 3) + 4 * (e & 3) + 16 * (c & 3)] : r * 254 - 127 };
+      function Er(t) { const e = (R[Ce] + Dn[t * 3] - it) / Re - x0, c = (R[Oe] + Dn[t * 3 + 1] - gt) / Re, r = (R[Me] + Dn[t * 3 + 2] - et) / Re - x0; if (c < 1 || c >= se - 2 || e < 1 || e >= yt * 4 - 2 || r < 1 || r >= yt * 4 - 2) { wt[t] = -1; return } const o = e | 0, l = c | 0, s = r | 0, n = e - o, u = c - l, f = ht(o, l, s), m = ht(o, l + 1, s), x = ht(o, l, s + 1), h = ht(o, l + 1, s + 1), A = f + (ht(o + 1, l, s) - f) * n, E = m + (ht(o + 1, l + 1, s) - m) * n, N = x + (ht(o + 1, l, s + 1) - x) * n, L = h + (ht(o + 1, l + 1, s + 1) - h) * n, i = A + (E - A) * u; wt[t] = (i + (N + (L - N) * u - i) * (r - s)) / 127 }
+      const Qo = .65; function Jo() { const t = Ae(Ye(R[S0] * R[S0] + R[A0] * R[A0] + R[k0] * R[k0]) / .55) + 1; for (let e = 0; e < t; e++) { R[Ce] += R[S0] / t, R[Oe] += R[A0] / t, R[Me] += R[k0] / t; for (let c = 0; c < 2; c++) { Er(0); const r = wt[0] + Qo; if (r <= 0) break; for (let f = 1; f < 7; f++)Er(f); let o = wt[1] - wt[2], l = wt[3] - wt[4], s = wt[5] - wt[6]; const n = Ye(o * o + l * l + s * s); if (n < .075) break; o /= n, l /= n, s /= n; const u = R[$t] * o + R[Zt] * l + R[Qt] * s; R[Ce] -= o * r, R[Oe] -= l * r, R[Me] -= s * r, u > 0 && (R[$t] -= o * u, R[Zt] -= l * u, R[Qt] -= s * u) } } }
+      function Br(t) { requestAnimationFrame(Br); const e = t - R[vn]; R[vn] = t; let c = e / 1e3; if (c > .1 && (c = .1), e < 1e3 && (_t += e) > 0 && (L0++, _t > (G0 ? 400 : 1e3))) { const r = _t / L0, o = e0 ? P0 / e0 : 0; let l = 1; o ? (o > 10.8 || o < 8) && (l = 9.6 / o) : r > 17.6 ? (hn = 0, ++wn > 1 && (l = 15 / r, wn = 0, zn = Ee(zn * 2, 60))) : (wn = 0, r < 12.5 ? l = 15 / r : ++hn > zn && (l = 1.17, hn = 0)), l = l < .5 ? .5 : l > 1.7 ? 1.7 : l; const s = Ee(pr, Jt * B0), n = ne(s / 2, vr), u = Ze + Te; if (l < 1 ? Ze > n || Te <= E0 : Ze < n || Te >= 1) { const f = l < 1 ? Te > E0 ? n : vr : Te < 1 ? n : s; Ze *= l, (l < 1 ? Ze < f : Ze > f) && (Ze = f) } else Te *= Ye(l), Te = Te < E0 ? E0 : Te > 1 ? 1 : Te; u !== Ze + Te && Rt("ms10", [me, Ze < s ? Ze | 0 : "", Te]), L0 = _t = P0 = e0 = 0, An() } R[pn] += c, windP += c * (.65 + SC[curS].ac[3] * 2.4); { if (It >= 0) { const k = 4 / (innerWidth < innerHeight ? innerWidth : innerHeight); let M = (_n - zr) * k, U = (In - Sr) * k; M = M > 1 ? 1 : M < -1 ? -1 : M, U = U > 1 ? 1 : U < -1 ? -1 : U, M0 += M * 1.5 * c, U0 += U * c } const r = 1 - vt(-c * 30); M0 += C0 * .0022, U0 += O0 * .0022, C0 = 0, O0 = 0; const o = M0 * r, l = U0 * r; M0 -= o, U0 -= l, Nn += o, Fn += l; const s = Nn * r, n = Fn * r; Nn -= s, Fn -= n; const u = R[w0] + s; let f = R[h0] - n; f = f < -1.55 ? -1.55 : f > 1.55 ? 1.55 : f; const m = Tn || n0 > 1 ? 42 : 13, x = 1 - vt(-c * 4.5), h = It >= 0 ? .7 : En - Bn, A = Pn - Ln, E = qn - Vn, N = oe(f), L = le(u), i = oe(u), S = R[$t] + ((L * N * h + i * A) * m - R[$t]) * x, v = R[Zt] + ((le(f) * h + E) * m - R[Zt]) * x, B = R[Qt] + ((-i * N * h + L * A) * m - R[Qt]) * x; let q = R[Ce] + S * c, O = R[Oe] + v * c, C = R[Me] + B * c; const z = Ye(q * q + C * C); z > 226 && (q *= 226 / z, C *= 226 / z), O = O < -46 ? -46 : O > 82 ? 82 : O, R[w0] = u, R[h0] = f, R[$t] = S, R[Zt] = v, R[Qt] = B, R[S0] = q - R[Ce], R[A0] = O - R[Oe], R[k0] = C - R[Me], Jo() } Rr(), Rn && (Cn++, e > _0 && (_0 = e), e < I0 && (I0 = e), e > On * 1.5 && (Mn++, Un++), R[z0] += e / 1e3, R[z0] > .5 && (cs.textContent = `${(Cn / R[z0]).toFixed(0)} fps · worst ${_0.toFixed(1)} ms · late ${Mn} (${Un}) · GPU ${R[Qs].toFixed(2)} ms · ${Ve}×${Ue} · ${SC[curS].n}`, R[z0] = 0, On = I0, Cn = 0, _0 = 0, I0 = 1e9, Mn = 0)) }
+      const togSt = () => { Rn = !Rn, Un = 0, On = 1e9, cs.textContent = "", tS.classList.toggle("on", Rn), tS.textContent = Rn ? "Stats: On" : "Stats: Off" }; tS.onclick = togSt;
+      const Lr = (t, e) => { switch (t.code) { case "KeyW": En = e; break; case "KeyS": Bn = e; break; case "KeyA": Ln = e; break; case "KeyD": Pn = e; break; case "KeyE": case "Space": qn = e, e && t.code === "Space" && t.preventDefault(); break; case "KeyQ": Vn = e; break; case "ShiftLeft": case "ShiftRight": Tn = e; break; default: e && !t.repeat && (t.code === "KeyH" ? togSt() : t.code === "KeyM" ? s1() : t.code === "Escape" ? (spO ? setSp(!1) : !document.pointerLockElement && s0(!G0)) : t.code >= "Digit1" && t.code <= "Digit6" && setScene(t.code.charCodeAt(5) - 49, !0)) } };
+      addEventListener("keydown", t => { G0 && t.code !== "KeyH" && t.code !== "KeyM" && !(t.code >= "Digit1" && t.code <= "Digit6") && t.code !== "Escape" || (W0(), Lr(t, 1)) }), addEventListener("keyup", t => Lr(t, 0));
+      const Pr = () => { En = Bn = Ln = Pn = qn = Vn = Tn = 0, It = -1, n0 = 0, drg = !1 }, qr = () => { W0(), setSp(!1); const t = tt.requestPointerLock && tt.requestPointerLock({ unadjustedMovement: !0 }); t && t.catch && t.catch(() => tt.requestPointerLock()).catch(() => 0) };
+      tt.addEventListener("click", () => { G0 || qr() }), tt.addEventListener("mousedown", () => { G0 || (drg = !0) }), addEventListener("mouseup", () => { drg = !1 }), addEventListener("mousemove", t => { (document.pointerLockElement === tt || drg && !G0) && (C0 += t.movementX, O0 += t.movementY) }), addEventListener("blur", Pr);
+      const e1 = t => { t.preventDefault(), W0(), n0 = t.touches.length; let e = null, c = !1; for (let r = 0; r < n0; r++)t.touches[r].identifier === It && (e = t.touches[r]); if (e || (It = -1, n0 && (e = t.touches[0], It = e.identifier, c = !0)), e) { const r = as.matches ? e.clientY : e.clientX, o = as.matches ? -e.clientX : e.clientY, l = 1100 / Ee(innerWidth, innerHeight); c ? (zr = r, Sr = o) : (C0 += (r - _n) * l, O0 += (o - In) * l), _n = r, In = o } };
+      for (const t of ["touchstart", "touchmove", "touchend", "touchcancel"]) tt.addEventListener(t, e1, { passive: !1 });
+      let G0 = !0; const Gn = ct("d"), s0 = t => { nn || (G0 = t, ls.className = t ? "m" : document.pointerLockElement ? "g p" : "g", t ? (Pr(), setTimeout(() => G0 && Gn.focus(), 100)) : (setSp(!1), document.activeElement.blur())) }, t1 = () => { W0(), s0(!1), Gn.innerHTML = "Resume <span>→</span>", st && document.documentElement.requestFullscreen?.()?.then(() => screen.orientation.lock("landscape")).catch(() => 0), st || qr() };
+      Gn.onclick = t1, ct("q").querySelectorAll("button").forEach((t, e) => { e === 2 - me ? t.className = "on" : t.onclick = () => { Rt("ms10", 2 - e), location.reload() } }), document.addEventListener("pointerlockchange", () => { G0 || (ls.className = document.pointerLockElement ? "g p" : "g") });
+      setScene(1, !0), await Ft("Lighting Solara\u2026", 1, 320), Rr(), await nt.onSubmittedWorkDone(), setTimeout(Rt, 15e3, "msl10", ""), s0(!0), requestAnimationFrame(t => { R[vn] = t, requestAnimationFrame(Br) });
+      let ut, Vr, Wn = !1; const Tr = .76;
+      function n1(t) { const e = t.sampleRate, c = (X, F, ...G) => { const _ = new X(t, F); for (const $ of G) _.connect($); return _.start && _.start(), _ }, r = (X, ...F) => c(GainNode, { gain: X }, ...F), o = (X, F, G, ..._) => c(BiquadFilterNode, { type: X, frequency: F, Q: G }, ..._), l = (X, F, G) => c(OscillatorNode, { frequency: X }, r(F, G)), s = (X, F) => { const G = e * X | 0, _ = new AudioBuffer({ length: G, numberOfChannels: 2, sampleRate: e }); return F(_.getChannelData(0), G), F(_.getChannelData(1), G), _ }, n = s(11, (X, F) => { for (let G = 0, _ = 0; G < F + 4096; G++)if (_ = (_ + .025 * (y() * 2 - 1)) / 1.025, G < F) X[G] = _ * 3.4; else { const $ = (G - F) / 4096; X[G - F] = X[G - F] * $ + _ * 3.4 * (1 - $) } }), u = s(4.5, (X, F) => { for (let G = 0, _ = 0; G < F; G++) { const $ = G / e; _ += (y() * 2 - 1 - _) * (.05 + .45 * vt(-$ * 2)), X[G] = _ * (1 - vt(-$ * 25)) * vt(-$ * 1.6) * (1 - G / F) } }), f = c(DynamicsCompressorNode, { threshold: -6, knee: 6, ratio: 20, attack: .003, release: .3 }, t.destination), m = Vr = r(0, f), x = c(ConvolverNode, { buffer: u }, m), h = (X, ...F) => c(AudioBufferSourceNode, { buffer: n, loop: !0, playbackRate: X }, ...F), wG = r(.24, m), wF = o("bandpass", 260, 1.4, wG); h(1, wF), l(.08, .11, wG.gain), l(.13, 65, wF.frequency); const sG = r(.1, m), sF = o("highpass", 1400, .6, sG); h(1.4, sF); const L = r(0, m), i = o("bandpass", 340, 1, L); h(.8, i); const S = r(1, m, r(1.4, x));[73.42, 110, 155.56, 220, 293.66].forEach((X, F) => { const G = r(.015 - F * .002, S); c(OscillatorNode, { frequency: X }, G), c(OscillatorNode, { frequency: X + b(.04, .12) }, G) }); const v = (X, F, G) => Array.from({ length: X }, () => { const _ = c(StereoPannerNode, {}, m, r(F, x)), $ = r(0, _); return { p: _, g: $, o: c(OscillatorNode, { type: G }, $) } }), q = v(3, 1.2, "sine"), O = v(2, 1.8, "triangle"), C = (X, F, G, _, $, ce, De) => { const Le = X.shift(), Qe = Le.o.frequency, zt = Le.g.gain; X.push(Le), Le.p.pan.setValueAtTime(b(-.7, .7), F), Qe.setValueAtTime(G, F), Qe.exponentialRampToValueAtTime(_, F + $), zt.setValueAtTime(0, F), zt.linearRampToValueAtTime(ce, F + De), zt.setTargetAtTime(0, F + De, ($ - De) / 5) }, z = [0, 1, 4, 5, 7, 8, 12, 13, 16]; let k = t.currentTime, U = k + 4, Q = k + 14, j = R[Ce], ze = R[Oe], re = R[Me]; return m.gain.setTargetAtTime(Tr, k, 1), () => { const X = t.currentTime, F = X + .05, G = X - k; if (G <= 0) return; let _ = K(R[Ce] - j, R[Oe] - ze, R[Me] - re) / G; _ > 60 && (_ = 0), k = X, j = R[Ce], ze = R[Oe], re = R[Me]; const stm = SC[curS].ac[3]; wG.gain.setTargetAtTime(.14 + stm * .52, F, .45), wF.frequency.setTargetAtTime(200 + stm * 390, F, .5), sG.gain.setTargetAtTime(.02 + stm * .24, F, .45), L.gain.setTargetAtTime(.4 * ye(Ee(_ / 42, 1), 1.2), F, .3), i.frequency.setTargetAtTime(220 + _ * 10, F, .3), F > U && (C(q, F, 293.66 * ye(2, z[y() * 9 | 0] / 12), 293.66 * ye(2, z[y() * 9 | 0] / 12), 5.2, b(.015, .032), .04), U = F + b(3.5, 10)), F > Q && (C(O, F, b(120, 210), b(70, 130), b(1.8, 3.2), .055, .6), Q = F + b(22, 48)) } }
+      function W0() { ut || (ut = new AudioContext({ latencyHint: "playback" }), setInterval(n1(ut), 100)), ut.state === "suspended" && !document.hidden && ut.resume() }
+      const s1 = () => { Wn = !Wn, tA.classList.toggle("on", !Wn), tA.textContent = Wn ? "Audio: Off" : "Audio: On", Vr && Vr.gain.setTargetAtTime(Wn ? 0 : Tr, ut.currentTime, .08) }; tA.onclick = () => { W0(), s1() }; document.addEventListener("visibilitychange", () => { ut && (document.hidden ? ut.suspend() : ut.resume()) })
+    })().catch(st => { console.error(st), document.body.className = "l e", document.getElementById("s").textContent = (st.cause ? "" : "Failed to start: ") + st.message });</script>
+</body>
+
+</html>
