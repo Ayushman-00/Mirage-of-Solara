@@ -94,5 +94,5 @@ npx serve .
 
 ## License
 
-Released under the [MIT License](LICENSE). Built by [Ayushman-00](https://github.com/Ayushman-00).
+Released under the [MIT License](LICENSE). 
 
